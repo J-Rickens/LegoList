@@ -7,7 +7,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	$usna = htmlspecialchars($_POST["usna"], ENT_QUOTES, 'UTF-8');
 	$pwd = htmlspecialchars($_POST["pwd"], ENT_QUOTES, 'UTF-8');
 
-	// Instantiate RegisterContr Class
+	// Instantiate LoginContr Class
 	if(!class_exists('Dbh')) {
 		include("../.classes/dbh.class.php");
 	}
@@ -15,7 +15,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	include("../.classes/login-contr.class.php");
 	$login = new LoginContr($usna, $pwd);
 
-	// Running error handlers and user signup
+	// Running error handlers and user login
 	$login->loginUser();
 
 	// Send user to dashboard page
