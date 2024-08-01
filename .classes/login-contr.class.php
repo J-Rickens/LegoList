@@ -12,7 +12,7 @@ class LoginContr extends Login {
 
 	// Run Error Checks and login user if possible
 	public function loginUser() {
-		if (!$this->ecEmptyInput()) {
+		if ($this->ecEmptyInput()) {
 			// echo "Empty Value(s)";
 			header("location: ../login/index.php?error=emptyinput");
 			exit();
@@ -25,8 +25,8 @@ class LoginContr extends Login {
 	// Error Checks: empty
 	private function ecEmptyInput() {
 		if (empty($this->usna) || empty($this->pwd)){
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 }
