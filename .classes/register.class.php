@@ -24,9 +24,9 @@ class Register extends Dbh {
 		}
 
 		if ($stmt->rowCount() > 0) {
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 }

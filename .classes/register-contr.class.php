@@ -20,7 +20,7 @@ class RegisterContr extends Register {
 
 	// Run Error Checks and register user if possible
 	public function registerUser() {
-		if (!$this->ecEmptyInput()) {
+		if ($this->ecEmptyInput()) {
 			// echo "Empty Value(s)";
 			header("location: ../login/index.php?error=emptyinput");
 			exit();
@@ -44,7 +44,7 @@ class RegisterContr extends Register {
 			exit();
 		}
 
-		if (!$this->checkUserExist($this->usna, $this->email)) {
+		if ($this->checkUserExist($this->usna, $this->email)) {
 			// echo "Username or Email Taken";
 			header("location: ../login/index.php?error=useroremailtaken");
 			exit();
@@ -69,37 +69,37 @@ class RegisterContr extends Register {
 	// Error Checks: empty, valid, pwd match, usna/email taken (extended)
 	private function ecEmptyInput() {
 		if (empty($this->name) || empty($this->email) || empty($this->usna) || empty($this->pwd) || empty($this->pwd2)){
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private function ecValidName() {
-		if (!preg_match("/". LoginRegex::NAME ."/", $this->name)) {
-			return false;
+		if (preg_match("/". LoginRegex::NAME ."/", $this->name)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private function ecValidEmail() {
-		if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-			return false;
+		if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private function ecValidUsna() {
-		if (!preg_match("/". LoginRegex::USNA ."/", $this->usna)) {
-			return false;
+		if (preg_match("/". LoginRegex::USNA ."/", $this->usna)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private function ecValidPwd() {
-		if (!preg_match("/". LoginRegex::PWD ."/", $this->pwd)) {
-			return false;
+		if (preg_match("/". LoginRegex::PWD ."/", $this->pwd)) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private function ecPwdMatch() {
