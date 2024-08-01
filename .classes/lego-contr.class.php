@@ -62,12 +62,18 @@ class LegoContr extends Lego {
 			header("location: ../add/lego/index.php?error=cost");
 			exit();
 		}
+		$this->formatCost();
 
 		
 		// Register Lego Set
 		$this->setLego($this->legoID, $this->pieceCount, $this->legoName, $this->collection, $this->cost);
 	}
 
+
+	// Reformats cost to remove ',' and '$'
+	private function formatCost() {
+		$this->cost = str_replace(array(',','$'), "", $this->cost);
+	}
 
 	// Error Checks: empty, valid, legoID exists (extended)
 	private function ecEmptyInput() {
