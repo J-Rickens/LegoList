@@ -24,14 +24,14 @@
 		<div>
 			<h4>Register Lego</h4>
 			<p>Be the First to Register a New Lego Set Here!</p>
-			<form action="../.includes/regLego.inc.php" method="post">
-				<?php // inputs for required feilds: legoID, peiceCount, uid ?>
+			<form action="<?php echo $urlReturn . ".includes/regLego.inc.php"; ?>" method="post">
+				<?php // inputs for required feilds: legoID, pieceCount, uid ?>
 				<input type="text" name="legoID" placeholder="Lego ID #" 
 					pattern="<?php echo LegoRegex::LEGOID; ?>" title="<?php echo LegoRegex::LEGOIDDESCR; ?>"
 					value="<?php if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['legoID'])) {
 						echo htmlspecialchars($_GET['legoID'], ENT_QUOTES, 'UTF-8');
 					} ?>" required>
-				<input type="text" name="peiceCount" placeholder="Number of Peices"
+				<input type="text" name="pieceCount" placeholder="Number of Peices"
 					pattern="<?php echo LegoRegex::PEICES; ?>" title="<?php echo LegoRegex::PEICESDESCR; ?>"
 					required>
 				<input type="hidden" name="uid"
