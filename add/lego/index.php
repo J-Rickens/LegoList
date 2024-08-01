@@ -4,6 +4,10 @@
 	$urlTitle = "AddLego";
 	include('../../.templates/opener.tp.php');
 
+	if (!isset($_SESSION['uid'])) {
+		header("location: ". $urlReturn ."login");
+	}
+
  ?>
 
 
