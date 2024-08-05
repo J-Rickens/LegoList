@@ -16,6 +16,8 @@
 				<ul>
 					<?php if (isset($_SESSION['uid'])) { ?>
 						<li><a href=<?php echo $urlReturn . "dashboard"; ?>><?php echo $_SESSION['name']; ?></a></li>
+						<li><a href=<?php echo $urlReturn . "add/lego"; ?>>Add Lego</a></li>
+						<li><a href=<?php echo $urlReturn . "add/list"; ?>>Add List</a></li>
 						<li><a href=<?php echo $urlReturn . ".includes/logout.inc.php"; ?>>LOGOUT</a></li>
 					<?php } else { ?>
 						<li><a href=<?php echo $urlReturn . "login"; ?>>login/register</a></li>
