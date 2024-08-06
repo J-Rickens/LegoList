@@ -7,7 +7,7 @@ class LegoList extends Dbh {
 		
 		if (!$stmt->execute(array($listName, $pubPri, $uid))) {
 			$stmt = null;
-			header("location: ../add/list/index.php?error=setstmtfailed");
+			header("location: " . $urlReturn . "user/add/list/index.php?error=setstmtfailed");
 			exit();
 		}
 	}

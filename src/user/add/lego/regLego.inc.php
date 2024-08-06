@@ -1,5 +1,9 @@
 <?php 
 
+// set urlReturn
+$urlLvl = 3;
+include('../../../.shared/.templates/opener.tp.php');
+
 // Check if data was submit through post
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -13,20 +17,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
 	// Instantiate RegisterContr Class
 	if(!class_exists('Dbh')) {
-		include("../.classes/dbh.class.php");
+		include($urlReturn . ".shared/.classes/dbh.classes/dbh.class.php");
 	}
-	include("../.classes/lego.class.php");
-	include("../.classes/lego-contr.class.php");
+	include("lego.class.php");
+	include("lego-contr.class.php");
 	$lego = new LegoContr($legoID, $pieceCount, $legoName, $collection, $cost);
 
 	// Running error handlers and user signup
 	$lego->addLego();
 
 	// Send user to dashboard page
-	header("location: ../dashboard/");
+	header("location: " . $urlReturn . "user/dashboard/");
 }
 else
 {
 	// Send user to home page
-	header("location: ../");
+	header("location: " . $urlReturn);
 }

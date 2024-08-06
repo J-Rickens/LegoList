@@ -5,4 +5,4 @@ session_unset();
 session_destroy();
 
 // Send user back to home page
-header("location: ../");
+header("location: ../../");

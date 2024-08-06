@@ -1,8 +1,8 @@
 <?php 
 
-	$urlLvl = 2;
+	$urlLvl = 3;
 	$urlTitle = "AddLego";
-	include('../../.templates/opener.tp.php');
+	include('../../../.shared/.templates/opener.tp.php');
 
 	// Redurect user if not loged in
 	if (!isset($_SESSION['uid'])) {
@@ -10,7 +10,7 @@
 	}
 
 	// import regex patterns
-	include($urlReturn . ".regex/lego.regex.php");
+	include($urlReturn . ".shared/.regex/lego.regex.php");
 
  ?>
 
@@ -18,13 +18,13 @@
  <!DOCTYPE html>
  <html>
 
- 	<?php include($urlReturn . '.templates/header.tp.php'); ?>
+ 	<?php include($urlReturn . '.shared/.templates/header.tp.php'); ?>
 
 	<section>
 		<div>
 			<h4>Register Lego</h4>
 			<p>Be the First to Register a New Lego Set Here!</p>
-			<form action="<?php echo $urlReturn . ".includes/regLego.inc.php"; ?>" method="post">
+			<form action="<?php echo "regLego.inc.php"; ?>" method="post">
 				<?php // inputs for required feilds: legoID, pieceCount, uid ?>
 				<input type="text" name="legoID" placeholder="Lego ID #" 
 					pattern="<?php echo LegoRegex::LEGOID; ?>" title="<?php echo LegoRegex::LEGOIDDESCR; ?>"
@@ -50,6 +50,6 @@
 		</div>
 	</section>
 
-	<?php include($urlReturn . '.templates/footer.tp.php'); ?>
+	<?php include($urlReturn . '.shared/.templates/footer.tp.php'); ?>
 
  </html>

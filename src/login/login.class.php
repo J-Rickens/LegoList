@@ -7,12 +7,12 @@ class Login extends Dbh {
 
 		if (!$stmt->execute(array($usna, $usna))) {
 			$stmt = null;
-			header("location: ../login/index.php?error=getstmtfailed");
+			header("location: " . $urlReturn . "login/index.php?error=getstmtfailed");
 			exit();
 		}
 		if ($stmt->rowCount() == 0) {
 			$stmt = null;
-			header("location: ../login/index.php?error=usernotfound");
+			header("location: " . $urlReturn . "login/index.php?error=usernotfound");
 			exit();
 		}
 
@@ -20,7 +20,7 @@ class Login extends Dbh {
 		$checkPwd = password_verify($pwd, $hashedPwds[0]["password"]);
 		if ($checkPwd == false) {
 			$stmt = null;
-			header("location: ../login/index.php?error=wrongpassword");
+			header("location: " . $urlReturn . "login/index.php?error=wrongpassword");
 			exit();
 		}
 		elseif ($checkPwd == true) {
@@ -28,12 +28,12 @@ class Login extends Dbh {
 
 			if (!$stmt->execute(array($usna, $usna, $hashedPwds[0]["password"]))) {
 				$stmt = null;
-				header("location: ../login/index.php?error=getstmtfailed");
+				header("location: " . $urlReturn . "login/index.php?error=getstmtfailed");
 				exit();
 			}
 			if ($stmt->rowCount() == 0) {
 				$stmt = null;
-				header("location: ../login/index.php?error=usernotfound");
+				header("location: " . $urlReturn . "login/index.php?error=usernotfound");
 				exit();
 			}
 

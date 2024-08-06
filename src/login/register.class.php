@@ -9,7 +9,7 @@ class Register extends Dbh {
 
 		if (!$stmt->execute(array($usna, $email, $name, $hashedPwd))) {
 			$stmt = null;
-			header("location: ../login/index.php?error=setstmtfailed");
+			header("location: " . $urlReturn . "login/index.php?error=setstmtfailed");
 			exit();
 		}
 	}
@@ -19,7 +19,7 @@ class Register extends Dbh {
 
 		if (!$stmt->execute(array($usna, $email))) {
 			$stmt = null;
-			header("location: ../login/index.php?error=checkstmtfailed");
+			header("location: " . $urlReturn . "login/index.php?error=checkstmtfailed");
 			exit();
 		}
 

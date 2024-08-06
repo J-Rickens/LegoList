@@ -1,6 +1,6 @@
 <?php 
 
-include("../.regex/legoList.regex.php");
+include($urlReturn . ".shared/.regex/legoList.regex.php");
 
 class LegoListContr extends LegoList {
 
@@ -19,26 +19,26 @@ class LegoListContr extends LegoList {
 		// Running Error Checks
 		if ($this->ecEmptyInput()) {
 			// echo "Empty Value(s)";
-			header("location: ../add/list/index.php?error=emptyinput");
+			header("location: " . $urlReturn . "user/add/list/index.php?error=emptyinput");
 			exit();
 		}
 
 		if (!$this->ecValidName()) {
 			// echo "Invalid Name";
-			header("location: ../add/list/index.php?error=name");
+			header("location: " . $urlReturn . "user/add/list/index.php?error=name");
 			exit();
 		}
 
 		if (!$this->ecValidPubPri()) {
 			// echo "Invalid Public Private";
-			header("location: ../add/list/index.php?error=pubpri");
+			header("location: " . $urlReturn . "user/add/list/index.php?error=pubpri");
 			exit();
 		}
 		$this->formatPubPri();
 
 		if (!$this->ecValidUID()) {
 			// echo "Invalid UID";
-			header("location: ../add/list/index.php?error=uid");
+			header("location: " . $urlReturn . "user/add/list/index.php?error=uid");
 			exit();
 		}
 

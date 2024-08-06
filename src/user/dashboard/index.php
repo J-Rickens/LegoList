@@ -1,8 +1,8 @@
 <?php 
 
-	$urlLvl = 1;
+	$urlLvl = 2;
 	$urlTitle = "Dashboard";
-	include('../.templates/opener.tp.php');
+	include('../../.shared/.templates/opener.tp.php');
 
  ?>
 
@@ -10,10 +10,10 @@
  <!DOCTYPE html>
  <html>
 
- 	<?php include($urlReturn . '.templates/header.tp.php'); ?>
+ 	<?php include($urlReturn . '.shared/.templates/header.tp.php'); ?>
 
 	<!--start--><p>hi</p>
 
-	<?php include($urlReturn . '.templates/footer.tp.php'); ?>
+	<?php include($urlReturn . '.shared/.templates/footer.tp.php'); ?>
 
  </html>

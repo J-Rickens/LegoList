@@ -1,5 +1,9 @@
 <?php 
 
+// set urlReturn
+$urlLvl = 1;
+include('../.shared/.templates/opener.tp.php');
+
 // Check if data was submit through post
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -9,20 +13,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
 	// Instantiate LoginContr Class
 	if(!class_exists('Dbh')) {
-		include("../.classes/dbh.class.php");
+		include($urlReturn . ".shared/.classes/dbh.classes/dbh.class.php");
 	}
-	include("../.classes/login.class.php");
-	include("../.classes/login-contr.class.php");
+	include("login.class.php");
+	include("login-contr.class.php");
 	$login = new LoginContr($usna, $pwd);
 
 	// Running error handlers and user login
 	$login->loginUser();
 
 	// Send user to dashboard page
-	header("location: ../dashboard/");
+	header("location: " . $urlReturn . "user/dashboard/");
 }
 else
 {
 	// Send user to home page
-	header("location: ../");
+	header("location: " . $urlReturn);
 }

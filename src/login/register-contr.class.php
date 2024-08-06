@@ -1,6 +1,6 @@
 <?php 
 
-include("../.regex/login.regex.php");
+include($urlReturn . ".shared/.regex/login.regex.php");
 
 class RegisterContr extends Register {
 
@@ -22,43 +22,43 @@ class RegisterContr extends Register {
 	public function registerUser() {
 		if ($this->ecEmptyInput()) {
 			// echo "Empty Value(s)";
-			header("location: ../login/index.php?error=emptyinput");
+			header("location: " . $urlReturn . "login/index.php?error=emptyinput");
 			exit();
 		}
 
 		if (!$this->ecValidName()) {
 			// echo "Invalid Name";
-			header("location: ../login/index.php?error=name");
+			header("location: " . $urlReturn . "login/index.php?error=name");
 			exit();
 		}
 
 		if (!$this->ecValidUsna()) {
 			// echo "Invalid Username";
-			header("location: ../login/index.php?error=username");
+			header("location: " . $urlReturn . "login/index.php?error=username");
 			exit();
 		}
 
 		if (!$this->ecValidEmail()) {
 			// echo "Invalid Email";
-			header("location: ../login/index.php?error=email");
+			header("location: " . $urlReturn . "login/index.php?error=email");
 			exit();
 		}
 
 		if ($this->checkUserExist($this->usna, $this->email)) {
 			// echo "Username or Email Taken";
-			header("location: ../login/index.php?error=useroremailtaken");
+			header("location: " . $urlReturn . "login/index.php?error=useroremailtaken");
 			exit();
 		}
 
 		if (!$this->ecValidPwd()) {
 			// echo "Invalid Password";
-			header("location: ../login/index.php?error=password");
+			header("location: " . $urlReturn . "login/index.php?error=password");
 			exit();
 		}
 
 		if (!$this->ecPwdMatch()) {
 			// echo "Passwords Didn't Match";
-			header("location: ../login/index.php?error=passworddmatch");
+			header("location: " . $urlReturn . "login/index.php?error=passworddmatch");
 			exit();
 		}
 		

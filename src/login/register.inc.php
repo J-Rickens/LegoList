@@ -1,5 +1,9 @@
 <?php 
 
+// set urlReturn
+$urlLvl = 1;
+include('../.shared/.templates/opener.tp.php');
+
 // Check if data was submit through post
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
@@ -11,9 +15,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	$pwd2 = htmlspecialchars($_POST["pwd2"], ENT_QUOTES, 'UTF-8');
 
 	// Instantiate RegisterContr Class
-	include("../.classes/dbh.class.php");
-	include("../.classes/register.class.php");
-	include("../.classes/register-contr.class.php");
+	if(!class_exists('Dbh')) {
+		include($urlReturn . ".shared/.classes/dbh.classes/dbh.class.php");
+	}
+	include("register.class.php");
+	include("register-contr.class.php");
 	$register = new RegisterContr($name, $email, $usna, $pwd, $pwd2);
 
 	// Running error handlers and user signup
@@ -25,5 +31,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 else
 {
 	// Send user back to home page
-	header("location: ../");
+	header("location: " . $urlReturn);
 }

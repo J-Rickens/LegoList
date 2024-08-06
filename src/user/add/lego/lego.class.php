@@ -23,7 +23,7 @@ class Lego extends Dbh {
 
 		if (!$stmt->execute($stmtInputs)) {
 			$stmt = null;
-			header("location: ../add/lego/index.php?error=setstmtfailed");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=setstmtfailed");
 			exit();
 		}
 	}
@@ -33,7 +33,7 @@ class Lego extends Dbh {
 
 		if (!$stmt->execute(array($legoID))) {
 			$stmt = null;
-			header("location: ../add/lego/index.php?error=checkstmtfailed");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=checkstmtfailed");
 			exit();
 		}
 

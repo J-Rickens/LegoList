@@ -2,10 +2,10 @@
 
 	$urlLvl = 1;
 	$urlTitle = "login/Register";
-	include('../.templates/opener.tp.php');
+	include('../.shared/.templates/opener.tp.php');
 
 	// import regex patterns
-	include($urlReturn . ".regex/login.regex.php");
+	include($urlReturn . ".shared/.regex/login.regex.php");
 
  ?>
 
@@ -13,13 +13,13 @@
  <!DOCTYPE html>
  <html>
 
- 	<?php include($urlReturn . '.templates/header.tp.php'); ?>
+ 	<?php include($urlReturn . '.shared/.templates/header.tp.php'); ?>
 
 	<section>
 		<div>
 			<h4>Login</h4>
 			<p>Existing Builders Login Here!</p>
-			<form action="../.includes/login.inc.php" method="post">
+			<form action="<?php echo "login.inc.php"; ?>" method="post">
 				<?php // inputs for required feilds: username, password ?>
 				<input type="text" name="usna" placeholder="Username"
 					required>
@@ -33,7 +33,7 @@
 		<div>
 			<h4>Register</h4>
 			<p>Don't have an account yet? Sign up here!</p>
-			<form action="../.includes/register.inc.php" method="post">
+			<form action="<?php echo "register.inc.php"; ?>" method="post">
 				<?php // inputs for required feilds: name, email, username, password ?>
 				<input type="text" name="name" placeholder="Name"
 					pattern="<?php echo LoginRegex::NAME; ?>" title="<?php echo LoginRegex::NAMEDESCR; ?>"
@@ -54,6 +54,6 @@
 		</div>
 	</section>
 
-	<?php include($urlReturn . '.templates/footer.tp.php'); ?>
+	<?php include($urlReturn . '.shared/.templates/footer.tp.php'); ?>
 
  </html>

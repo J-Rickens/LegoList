@@ -1,6 +1,6 @@
 <?php 
 
-include("../.regex/lego.regex.php");
+include($urlReturn . ".shared/.regex/lego.regex.php");
 
 class LegoContr extends Lego {
 
@@ -23,43 +23,43 @@ class LegoContr extends Lego {
 		// Running Error Checks
 		if ($this->ecEmptyInput()) {
 			// echo "Empty Value(s)";
-			header("location: ../add/lego/index.php?error=emptyinput");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=emptyinput");
 			exit();
 		}
 
 		if (!$this->ecValidLegoID()) {
 			// echo "Invalid Lego Set ID";
-			header("location: ../add/lego/index.php?error=legoid");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=legoid");
 			exit();
 		}
 
 		if ($this->checkLegoExist($this->legoID)) {
 			// echo "Lego alread Exists";
-			header("location: ../add/lego/index.php?error=legoexists");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=legoexists");
 			exit();
 		}
 
 		if (!$this->ecValidPeiceCount()) {
 			// echo "Invalid Peice Count";
-			header("location: ../add/lego/index.php?error=piececount");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=piececount");
 			exit();
 		}
 
 		if (!$this->ecValidName()) {
 			// echo "Invalid Name";
-			header("location: ../add/lego/index.php?error=name");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=name");
 			exit();
 		}
 
 		if (!$this->ecValidCollection()) {
 			// echo "Invalid Collection";
-			header("location: ../add/lego/index.php?error=collection");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=collection");
 			exit();
 		}
 
 		if (!$this->ecValidCost()) {
 			// echo "Invalid Cost";
-			header("location: ../add/lego/index.php?error=cost");
+			header("location: " . $urlReturn . "user/add/lego/index.php?error=cost");
 			exit();
 		}
 		$this->formatCost();
