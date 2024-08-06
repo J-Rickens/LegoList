@@ -16,6 +16,8 @@ class LegoListContr extends LegoList {
 
 	// Run Error Checks and create list if possible
 	public function addLegoList() {
+		global $urlReturn;
+		
 		// Running Error Checks
 		if ($this->ecEmptyInput()) {
 			// echo "Empty Value(s)";

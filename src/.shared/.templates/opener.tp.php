@@ -1,8 +1,9 @@
 <?php 
 	
-	session_start();
+session_start();
 
-	$urlReturn = "";
-	for ($i = 0; $i < $urlLvl; $i++) {
-		$urlReturn = $urlReturn . "../";
-	}
+global $urlReturn;
+$urlReturn = "";
+for ($i = 0; $i < $urlLvl; $i++) {
+	$urlReturn = $urlReturn . "../";
+}

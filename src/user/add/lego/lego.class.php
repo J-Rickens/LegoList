@@ -3,6 +3,7 @@
 class Lego extends Dbh {
 
 	protected function setLego($legoID, $pieceCount, $legoName = null, $collection = null, $cost = null) {
+		global $urlReturn;
 		
 		// check if any of the values are not null and add to statment
 		$opColNames = array("name"=>$legoName, "collection"=>$collection, "cost"=>$cost);
@@ -29,6 +30,8 @@ class Lego extends Dbh {
 	}
 
 	protected function checkLegoExist($legoID) {
+		global $urlReturn;
+		
 		$stmt = $this->connect()->prepare('SELECT lego_id FROM legos WHERE lego_id = ?;');
 
 		if (!$stmt->execute(array($legoID))) {

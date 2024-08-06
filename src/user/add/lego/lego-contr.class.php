@@ -20,6 +20,8 @@ class LegoContr extends Lego {
 
 	// Run Error Checks and register lego if possible
 	public function addLego() {
+		global $urlReturn;
+		
 		// Running Error Checks
 		if ($this->ecEmptyInput()) {
 			// echo "Empty Value(s)";

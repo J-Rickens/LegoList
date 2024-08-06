@@ -20,6 +20,8 @@ class RegisterContr extends Register {
 
 	// Run Error Checks and register user if possible
 	public function registerUser() {
+		global $urlReturn;
+
 		if ($this->ecEmptyInput()) {
 			// echo "Empty Value(s)";
 			header("location: " . $urlReturn . "login/index.php?error=emptyinput");

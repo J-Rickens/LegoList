@@ -3,6 +3,8 @@
 class Login extends Dbh {
 
 	protected function getUser($usna, $pwd) {
+		global $urlReturn;
+		
 		$stmt = $this->connect()->prepare('SELECT password FROM users WHERE username = ? OR email = ?;');
 
 		if (!$stmt->execute(array($usna, $usna))) {

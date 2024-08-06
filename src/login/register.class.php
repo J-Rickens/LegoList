@@ -3,6 +3,8 @@
 class Register extends Dbh {
 
 	protected function setUser($usna, $email, $name, $pwd) {
+		global $urlReturn;
+
 		$stmt = $this->connect()->prepare('INSERT INTO users (username, email, name, password) VALUES (?, ?, ?, ?);');
 
 		$hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
@@ -15,6 +17,8 @@ class Register extends Dbh {
 	}
 
 	protected function checkUserExist($usna, $email) {
+		global $urlReturn;
+
 		$stmt = $this->connect()->prepare('SELECT username FROM users WHERE username = ? OR email = ?;');
 
 		if (!$stmt->execute(array($usna, $email))) {
