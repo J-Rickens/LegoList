@@ -6,6 +6,13 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Test\\Unit\\Shared\\Tp\\' => array($baseDir . '/test/Unit/.Shared/Templates'),
+    'Test\\Unit\\Shared\\Inc\\' => array($baseDir . '/test/Unit/.Shared/Includes'),
+    'Test\\Unit\\Shared\\' => array($baseDir . '/test/Unit/.Shared'),
+    'Test\\' => array($baseDir . '/test'),
+    'Src\\Shared\\Tp\\' => array($baseDir . '/src/.Shared/Templates'),
+    'Src\\Shared\\Inc\\' => array($baseDir . '/src/.Shared/Includes'),
+    'Src\\Shared\\' => array($baseDir . '/src/.Shared'),
     'Src\\' => array($baseDir . '/src'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
     'Ramsey\\Collection\\' => array($vendorDir . '/ramsey/collection/src'),

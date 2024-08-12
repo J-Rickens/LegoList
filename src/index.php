@@ -1,19 +1,31 @@
 <?php 
 
-	$urlLvl = 0;
-	$urlTitle = "Home";
-	include('.shared/.templates/opener.tp.php');
-	
+declare(strict_types = 1);
+namespace Src;
+require __DIR__ . '\\..\\vendor\\autoload.php';
+
+use Src\Shared\Tp\OpenerTp;
+use Src\Shared\Tp\HeaderTp;
+use Src\Shared\Tp\FooterTp;
+
+global $openerTp;
+$openerTp = new OpenerTp();
+$openerTp->startSession();
+$openerTp->setUrlReturn(0);
+$urlTitle = 'Home';
+
  ?>
 
 
  <!DOCTYPE html>
  <html>
 
- 	<?php include($urlReturn . '.shared/.templates/header.tp.php'); ?>
+ 	<?php $headerTp = new HeaderTp();
+	$headerTp->echoHeader($openerTp->getUrlReturn(), $urlTitle) ?>
 
 	<!--start-->
 
-	<?php include($urlReturn . '.shared/.templates/footer.tp.php'); ?>
+	<?php $footerTp = new FooterTp();
+	$footerTp->echoFooter($openerTp->getUrlReturn()); ?>
 
  </html>

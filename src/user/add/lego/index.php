@@ -1,16 +1,24 @@
 <?php 
+ 
+declare(strict_types = 1);
+namespace Src\User\Add\Lego;
+require __DIR__ . '\\..\\..\\..\\..\\vendor\\autoload.php';
 
-	$urlLvl = 3;
-	$urlTitle = "AddLego";
-	include('../../../.shared/.templates/opener.tp.php');
+use Src\Shared\Tp\OpenerTp;
+use Src\Shared\Tp\HeaderTp;
+use Src\Shared\Tp\FooterTp;
+use Src\Shared\Regex\LegoRegex;
 
-	// Redurect user if not loged in
-	if (!isset($_SESSION['uid'])) {
-		header("location: ". $urlReturn ."login");
-	}
+global $openerTp;
+$openerTp = new OpenerTp();
+$openerTp->startSession();
+$openerTp->setUrlReturn(3);
+$urlTitle = 'AddLego';
 
-	// import regex patterns
-	include($urlReturn . ".shared/.regex/lego.regex.php");
+// Redurect user if not loged in
+if (!isset($_SESSION['uid'])) {
+	header('location: '. $openerTp->getUrlReturn() .'Login');
+}
 
  ?>
 
@@ -18,17 +26,18 @@
  <!DOCTYPE html>
  <html>
 
- 	<?php include($urlReturn . '.shared/.templates/header.tp.php'); ?>
+ 	<?php $headerTp = new HeaderTp();
+	$headerTp->echoHeader($openerTp->getUrlReturn(), $urlTitle) ?>
 
 	<section>
 		<div>
 			<h4>Register Lego</h4>
 			<p>Be the First to Register a New Lego Set Here!</p>
-			<form action="<?php echo "regLego.inc.php"; ?>" method="post">
+			<form action="<?php echo 'RegLegoInc.php'; ?>" method="post">
 				<?php // inputs for required feilds: legoID, pieceCount, uid ?>
 				<input type="text" name="legoID" placeholder="Lego ID #" 
 					pattern="<?php echo LegoRegex::LEGOID; ?>" title="<?php echo LegoRegex::LEGOIDDESCR; ?>"
-					value="<?php if($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['legoID'])) {
+					value="<?php if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['legoID'])) {
 						echo htmlspecialchars($_GET['legoID'], ENT_QUOTES, 'UTF-8');
 					} ?>" required>
 				<input type="text" name="pieceCount" placeholder="Number of Peices"
@@ -50,6 +59,7 @@
 		</div>
 	</section>
 
-	<?php include($urlReturn . '.shared/.templates/footer.tp.php'); ?>
+	<?php $footerTp = new FooterTp();
+	$footerTp->echoFooter($openerTp->getUrlReturn()); ?>
 
  </html>

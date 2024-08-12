@@ -1,11 +1,19 @@
 <?php 
 
-	$urlLvl = 1;
-	$urlTitle = "login/Register";
-	include('../.shared/.templates/opener.tp.php');
+declare(strict_types = 1);
+namespace Src\Login;
+require __DIR__ . '\\..\\..\\vendor\\autoload.php';
 
-	// import regex patterns
-	include($urlReturn . ".shared/.regex/login.regex.php");
+use Src\Shared\Tp\OpenerTp;
+use Src\Shared\Tp\HeaderTp;
+use Src\Shared\Tp\FooterTp;
+use Src\Shared\Regex\LoginRegex;
+
+global $openerTp;
+$openerTp = new OpenerTp();
+$openerTp->startSession();
+$openerTp->setUrlReturn(1);
+$urlTitle = 'Login/Register';
 
  ?>
 
@@ -13,13 +21,14 @@
  <!DOCTYPE html>
  <html>
 
- 	<?php include($urlReturn . '.shared/.templates/header.tp.php'); ?>
+ 	<?php $headerTp = new HeaderTp();
+	$headerTp->echoHeader($openerTp->getUrlReturn(), $urlTitle) ?>
 
 	<section>
 		<div>
 			<h4>Login</h4>
 			<p>Existing Builders Login Here!</p>
-			<form action="<?php echo "login.inc.php"; ?>" method="post">
+			<form action="<?php echo 'LoginInc.php'; ?>" method="post">
 				<?php // inputs for required feilds: username, password ?>
 				<input type="text" name="usna" placeholder="Username"
 					required>
@@ -33,7 +42,7 @@
 		<div>
 			<h4>Register</h4>
 			<p>Don't have an account yet? Sign up here!</p>
-			<form action="<?php echo "register.inc.php"; ?>" method="post">
+			<form action="<?php echo 'RegisterInc.php'; ?>" method="post">
 				<?php // inputs for required feilds: name, email, username, password ?>
 				<input type="text" name="name" placeholder="Name"
 					pattern="<?php echo LoginRegex::NAME; ?>" title="<?php echo LoginRegex::NAMEDESCR; ?>"
@@ -54,6 +63,7 @@
 		</div>
 	</section>
 
-	<?php include($urlReturn . '.shared/.templates/footer.tp.php'); ?>
+	<?php $footerTp = new FooterTp();
+	$footerTp->echoFooter($openerTp->getUrlReturn()); ?>
 
  </html>

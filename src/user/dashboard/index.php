@@ -1,8 +1,23 @@
 <?php 
 
-	$urlLvl = 2;
-	$urlTitle = "Dashboard";
-	include('../../.shared/.templates/opener.tp.php');
+declare(strict_types = 1);
+namespace Src\Dashboard;
+require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
+
+use Src\Shared\Tp\OpenerTp;
+use Src\Shared\Tp\HeaderTp;
+use Src\Shared\Tp\FooterTp;
+
+global $openerTp;
+$openerTp = new OpenerTp();
+$openerTp->startSession();
+$openerTp->setUrlReturn(2);
+$urlTitle = 'Dashboard';
+
+// Redurect user if not loged in
+if (!isset($_SESSION['uid'])) {
+	header('location: '. $openerTp->getUrlReturn() .'Login');
+}
 
  ?>
 
@@ -10,10 +25,12 @@
  <!DOCTYPE html>
  <html>
 
- 	<?php include($urlReturn . '.shared/.templates/header.tp.php'); ?>
+ 	<?php $headerTp = new HeaderTp();
+	$headerTp->echoHeader($openerTp->getUrlReturn(), $urlTitle) ?>
 
-	<!--start--><p>hi</p>
+	<!--start--><p>Dashboard</p>
 
-	<?php include($urlReturn . '.shared/.templates/footer.tp.php'); ?>
+	<?php $footerTp = new FooterTp();
+	$footerTp->echoFooter($openerTp->getUrlReturn()); ?>
 
  </html>

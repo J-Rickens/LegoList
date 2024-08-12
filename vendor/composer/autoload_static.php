@@ -13,8 +13,18 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
     );
 
     public static $prefixLengthsPsr4 = array (
+        'T' => 
+        array (
+            'Test\\Unit\\Shared\\Tp\\' => 20,
+            'Test\\Unit\\Shared\\Inc\\' => 21,
+            'Test\\Unit\\Shared\\' => 17,
+            'Test\\' => 5,
+        ),
         'S' => 
         array (
+            'Src\\Shared\\Tp\\' => 14,
+            'Src\\Shared\\Inc\\' => 15,
+            'Src\\Shared\\' => 11,
             'Src\\' => 4,
         ),
         'R' => 
@@ -37,6 +47,34 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
     );
 
     public static $prefixDirsPsr4 = array (
+        'Test\\Unit\\Shared\\Tp\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/test/Unit/.Shared/Templates',
+        ),
+        'Test\\Unit\\Shared\\Inc\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/test/Unit/.Shared/Includes',
+        ),
+        'Test\\Unit\\Shared\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/test/Unit/.Shared',
+        ),
+        'Test\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/test',
+        ),
+        'Src\\Shared\\Tp\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/.Shared/Templates',
+        ),
+        'Src\\Shared\\Inc\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/.Shared/Includes',
+        ),
+        'Src\\Shared\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/.Shared',
+        ),
         'Src\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',

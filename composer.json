@@ -7,7 +7,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Src\\": "src/"
+            "Src\\": "src/",
+            "Src\\Shared\\": "src/.Shared/",
+            "Src\\Shared\\Inc\\": "src/.Shared/Includes/",
+            "Src\\Shared\\Tp\\": "src/.Shared/Templates/",
+            "Test\\": "test/",
+            "Test\\Unit\\Shared\\": "test/Unit/.Shared/",
+            "Test\\Unit\\Shared\\Inc\\": "test/Unit/.Shared/Includes/",
+            "Test\\Unit\\Shared\\Tp\\": "test/Unit/.Shared/Templates/"
         }
     }    
 }
