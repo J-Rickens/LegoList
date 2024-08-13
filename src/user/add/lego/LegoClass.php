@@ -22,14 +22,14 @@ class LegoClass {
 		}
 	}
 
-	public function setLego($legoID, $pieceCount, $legoName = null, $collection = null, $cost = null) {
+	public function setLego(array $legoVal) {
 		//global $openerTp;
 		
 		// check if any of the values are not null and add to statment
-		$opColNames = array('name'=>$legoName, 'collection'=>$collection, 'cost'=>$cost);
+		$opColNames = array('name'=>$legoVal['legoName'], 'collection'=>$legoVal['collection'], 'cost'=>$legoVal['cost']);
 		$stmtP1 = 'INSERT INTO legos (lego_id, piece_count';
 		$stmtP2 = ') VALUES (?, ?';
-		$stmtInputs = array($legoID, $pieceCount);
+		$stmtInputs = array($legoVal['legoID'], $legoVal['pieceCount']);
 		foreach ($opColNames as $key => $value) {
 			if (!empty($value)) {
 				$stmtP1 = $stmtP1 . ', ' . $key;
@@ -50,7 +50,7 @@ class LegoClass {
 		}
 	}
 
-	public function checkLegoExist($legoID) {
+	public function checkLegoExist($legoID): bool {
 		//global $openerTp;
 		
 		$this->dbh->prepStmt('SELECT lego_id FROM legos WHERE lego_id = ?;');

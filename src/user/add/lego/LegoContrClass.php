@@ -11,30 +11,50 @@ use Src\Shared\Exceptions\InvalidInputException;
 class LegoContrClass {
 
 	private $legoClass;
-	private $legoID;
-	private $pieceCount;
-	private $legoName;
-	private $collection;
-	private $cost;
+	private $legoVal = array('legoID'=>null,
+		'pieceCount'=>null,
+		'legoName'=>null,
+		'collection'=>null,
+		'cost'=>null);
 
-	public function __construct($legoID, $pieceCount, $legoName = null, $collection = null, $cost = null, $legoClass = null) {
-		if (is_null($legoClass))
-		{
+	public function __construct(array $legoVal, $legoClass = null) {
+		if (is_null($legoClass)) {
 			$this->legoClass = new LegoClass();
 		}
-		else
-		{
+		else {
 			$this->legoClass = $legoClass;
 		}
-		$this->legoID = $legoID;
-		$this->pieceCount = $pieceCount;
-		$this->legoName = $legoName;
-		$this->collection = $collection;
-		$this->cost = $cost;
+
+		foreach ($legoVal as $key => $value) {
+			$this->legoVal[$key] = $value;
+		}
+	}
+
+	public function setLegoVal(array $legoVal): void
+	{
+		foreach ($legoVal as $key => $value) {
+			$this->legoVal[$key] = $value;
+		}
+	}
+
+	public function getLegoVal(bool $getFull = true, array $valNames = array()): array
+	{
+		if ($getFull) {
+			return $this->legoVal;
+		}
+		else {
+			$returnArray = array();
+			foreach ($valNames as $key) {
+				$returnArray[$key] = $this->legoVal[$key];
+			}
+			return $returnArray;
+		}
 	}
 
 	// Run Error Checks and register lego if possible
-	public function addLego() {
+	public function addLego(array $legoVal = array()): void {
+		$this->setLegoVal($legoVal);
+
 		//global $openerTp;
 		
 		// Running Error Checks
@@ -52,7 +72,7 @@ class LegoContrClass {
 			//exit();
 		}
 
-		if ($this->legoClass->checkLegoExist($this->legoID)) {
+		if ($this->legoClass->checkLegoExist($this->legoVal['legoID'])) {
 			// echo 'Lego alread Exists';
 			throw new InvalidInputException('legoexists');
 			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=legoexists');
@@ -86,57 +106,60 @@ class LegoContrClass {
 			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=cost');
 			//exit();
 		}
-		$this->formatCost();
+		if (isset($this->legoVal['cost'])) {
+			$this->formatCost();
+		}
 
 		
 		// Register Lego Set
-		$this->legoClass->setLego($this->legoID, $this->pieceCount, $this->legoName, $this->collection, $this->cost);
+		$this->legoClass->setLego($this->legoVal);
+		//legoID, $this->pieceCount, $this->legoName, $this->collection, $this->cost);
 	}
 
 
 	// Reformats cost to remove ',' and '$'
-	private function formatCost() {
-		$this->cost = str_replace(array(',','$'), '', $this->cost);
+	private function formatCost(): void {
+		$this->legoVal['cost'] = str_replace(array(',','$'), '', $this->legoVal['cost']);
 	}
 
 	// Error Checks: empty, valid, legoID exists (extended)
-	private function ecEmptyInput() {
-		if (empty($this->legoID) || empty($this->pieceCount)){
+	private function ecEmptyInput(): bool {
+		if (empty($this->legoVal['legoID']) || empty($this->legoVal['pieceCount'])){
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidLegoID() {
-		if (preg_match('/'. LegoRegex::LEGOID .'/', $this->legoID)) {
+	private function ecValidLegoID(): bool {
+		if (preg_match('/'. LegoRegex::LEGOID .'/', $this->legoVal['legoID'])) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidPeiceCount() {
-		if (preg_match('/'. LegoRegex::PEICES .'/', $this->pieceCount)) {
+	private function ecValidPeiceCount(): bool {
+		if (preg_match('/'. LegoRegex::PEICES .'/', $this->legoVal['pieceCount'])) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidName() {
-		if (empty($this->legoName) || preg_match('/'. LegoRegex::NAME .'/', $this->legoName)) {
+	private function ecValidName(): bool {
+		if (is_null($this->legoVal['legoName']) || preg_match('/'. LegoRegex::NAME .'/', $this->legoVal['legoName'])) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidCollection() {
-		if (empty($this->collection) || preg_match('/'. LegoRegex::COLLECTION .'/', $this->collection)) {
+	private function ecValidCollection(): bool {
+		if (is_null($this->legoVal['collection']) || preg_match('/'. LegoRegex::COLLECTION .'/', $this->legoVal['collection'])) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidCost() {
-		if (empty($this->cost) || preg_match('/'. LegoRegex::COST .'/', $this->cost)) {
+	private function ecValidCost(): bool {
+		if (is_null($this->legoVal['cost']) || preg_match('/'. LegoRegex::COST .'/', $this->legoVal['cost'])) {
 			return true;
 		}
 		return false;
