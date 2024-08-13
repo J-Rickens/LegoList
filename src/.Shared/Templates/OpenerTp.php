@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Src\Shared\Tp;
 require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
 
-use Src\Shared\Exception\UndefinedVariableException;
+use Src\Shared\Exceptions\UndefinedVariableException;
 
 class OpenerTp
 {

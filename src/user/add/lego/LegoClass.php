@@ -5,11 +5,25 @@ namespace Src\User\Add\Lego;
 require __DIR__ . '\\..\\..\\..\\..\\vendor\\autoload.php';
 
 use Src\Shared\Classes\DbhClass;
+use Src\Shared\Exceptions\StmtFailedException;
 
-class LegoClass extends DbhClass {
+class LegoClass {
 
-	protected function setLego($legoID, $pieceCount, $legoName = null, $collection = null, $cost = null) {
-		global $openerTp;
+	private $dbh;
+
+	public function __construct($dbh = null) {
+		if (is_null($dbh))
+		{
+			$this->dbh = new DbhClass();
+		}
+		else
+		{
+			$this->dbh = $dbh;
+		}
+	}
+
+	public function setLego($legoID, $pieceCount, $legoName = null, $collection = null, $cost = null) {
+		//global $openerTp;
 		
 		// check if any of the values are not null and add to statment
 		$opColNames = array('name'=>$legoName, 'collection'=>$collection, 'cost'=>$cost);
@@ -23,30 +37,32 @@ class LegoClass extends DbhClass {
 				$stmtInputs[] = $value;
 			}
 		}
-		$stmtP1 = $stmtP1 . $stmtP2 . ');';
+		$stmt = $stmtP1 . $stmtP2 . ');';
 
 		// prepare the statment
-		$stmt = $this->connect()->prepare($stmtP1);
+		$this->dbh->prepStmt($stmt);
 
-		if (!$stmt->execute($stmtInputs)) {
-			$stmt = null;
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=setstmtfailed');
-			exit();
+		if (!$this->dbh->execStmt($stmtInputs)) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('setstmtfailed'); 
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=setstmtfailed');
+			//exit();
 		}
 	}
 
-	protected function checkLegoExist($legoID) {
-		global $openerTp;
+	public function checkLegoExist($legoID) {
+		//global $openerTp;
 		
-		$stmt = $this->connect()->prepare('SELECT lego_id FROM legos WHERE lego_id = ?;');
+		$this->dbh->prepStmt('SELECT lego_id FROM legos WHERE lego_id = ?;');
 
-		if (!$stmt->execute(array($legoID))) {
-			$stmt = null;
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=checkstmtfailed');
-			exit();
+		if (!$this->dbh->execStmt(array($legoID))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('checkstmtfailed');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=checkstmtfailed');
+			//exit();
 		}
 
-		if ($stmt->rowCount() > 0) {
+		if ($this->dbh->getStmt()->rowCount() > 0) {
 			return true;
 		}
 		return false;

@@ -6,16 +6,26 @@ require __DIR__ . '\\..\\..\\..\\..\\vendor\\autoload.php';
 
 use Src\User\Add\Lego\LegoClass;
 use Src\Shared\Regex\LegoRegex;
+use Src\Shared\Exceptions\InvalidInputException;
 
-class LegoContrClass extends LegoClass {
+class LegoContrClass {
 
+	private $legoClass;
 	private $legoID;
 	private $pieceCount;
 	private $legoName;
 	private $collection;
 	private $cost;
 
-	public function __construct($legoID, $pieceCount, $legoName = null, $collection = null, $cost = null) {
+	public function __construct($legoID, $pieceCount, $legoName = null, $collection = null, $cost = null, $legoClass = null) {
+		if (is_null($legoClass))
+		{
+			$this->legoClass = new LegoClass();
+		}
+		else
+		{
+			$this->legoClass = $legoClass;
+		}
 		$this->legoID = $legoID;
 		$this->pieceCount = $pieceCount;
 		$this->legoName = $legoName;
@@ -25,55 +35,62 @@ class LegoContrClass extends LegoClass {
 
 	// Run Error Checks and register lego if possible
 	public function addLego() {
-		global $openerTp;
+		//global $openerTp;
 		
 		// Running Error Checks
 		if ($this->ecEmptyInput()) {
 			// echo 'Empty Value(s)';
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=emptyinput');
-			exit();
+			throw new InvalidInputException('emptyinput');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=emptyinput');
+			//exit();
 		}
 
 		if (!$this->ecValidLegoID()) {
 			// echo 'Invalid Lego Set ID';
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=legoid');
-			exit();
+			throw new InvalidInputException('legoid');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=legoid');
+			//exit();
 		}
 
-		if ($this->checkLegoExist($this->legoID)) {
+		if ($this->legoClass->checkLegoExist($this->legoID)) {
 			// echo 'Lego alread Exists';
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=legoexists');
-			exit();
+			throw new InvalidInputException('legoexists');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=legoexists');
+			//exit();
 		}
 
 		if (!$this->ecValidPeiceCount()) {
 			// echo 'Invalid Peice Count';
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=piececount');
-			exit();
+			throw new InvalidInputException('piececount');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=piececount');
+			//exit();
 		}
 
 		if (!$this->ecValidName()) {
 			// echo 'Invalid Name';
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=name');
-			exit();
+			throw new InvalidInputException('name');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=name');
+			//exit();
 		}
 
 		if (!$this->ecValidCollection()) {
 			// echo 'Invalid Collection';
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=collection');
-			exit();
+			throw new InvalidInputException('collection');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=collection');
+			//exit();
 		}
 
 		if (!$this->ecValidCost()) {
 			// echo 'Invalid Cost';
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=cost');
-			exit();
+			throw new InvalidInputException('cost');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=cost');
+			//exit();
 		}
 		$this->formatCost();
 
 		
 		// Register Lego Set
-		$this->setLego($this->legoID, $this->pieceCount, $this->legoName, $this->collection, $this->cost);
+		$this->legoClass->setLego($this->legoID, $this->pieceCount, $this->legoName, $this->collection, $this->cost);
 	}
 
 

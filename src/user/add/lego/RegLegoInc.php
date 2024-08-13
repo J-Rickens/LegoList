@@ -6,6 +6,8 @@ require __DIR__ . '\\..\\..\\..\\..\\vendor\\autoload.php';
 
 use Src\Shared\Tp\OpenerTp;
 use Src\User\Add\Lego\LegoContrClass;
+use Src\Shared\Exceptions\InvalidInputException;
+use Src\Shared\Exceptions\StmtFailedException;
 
 global $openerTp;
 $openerTp = new OpenerTp();
@@ -26,7 +28,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 	$lego = new LegoContrClass($legoID, $pieceCount, $legoName, $collection, $cost);
 
 	// Running error handlers and user signup
-	$lego->addLego();
+	try {
+		$lego->addLego();
+	} catch (InvalidInputException | StmtFailedException $e) {
+		header('location: ' . $openerTp->getUrlReturn() . 'User/Add/Lego/index.php?error=' . $e->getMessage());
+		exit();
+	}
 
 	// Send user to dashboard page
 	header('location: ' . $openerTp->getUrlReturn() . 'User/Dashboard/');

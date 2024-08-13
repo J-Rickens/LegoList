@@ -6,7 +6,7 @@ namespace test\unit\Shared\Tp;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-use Src\Shared\Exception\UndefinedVariableException;
+use Src\Shared\Exceptions\UndefinedVariableException;
 use Src\Shared\Tp\OpenerTp;
 
 
