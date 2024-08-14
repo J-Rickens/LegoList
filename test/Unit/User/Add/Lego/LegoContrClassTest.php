@@ -81,7 +81,9 @@ class LegoContrClassTest extends TestCase
 				'collection'=>'1234567890abzABZ 123','cost'=>'$123,456.78']],
 			[['legoID'=>'1234','pieceCount'=>'1234','cost'=>'123456.78']],
 			[['legoID'=>'1234','pieceCount'=>'1234','cost'=>'123456']],
-			[['legoID'=>'1234','pieceCount'=>'1234','cost'=>'$1,234']]
+			[['legoID'=>'1234','pieceCount'=>'1234','cost'=>'$1,234']],
+			[['legoID'=>'123','pieceCount'=>'1','legoName'=>'123','collection'=>'123','cost'=>null]],
+			[['legoID'=>'123','pieceCount'=>'1','legoName'=>'','collection'=>'','cost'=>'']]
 		];
 	}
 
@@ -118,17 +120,17 @@ class LegoContrClassTest extends TestCase
 			[['legoID'=>'1234','pieceCount'=>'one'],'piececount'],
 			[['legoID'=>'1234','pieceCount'=>'#12'],'piececount'],
 
-			[['legoID'=>'1234','pieceCount'=>'1234','legoName'=>''],'name'],
+			//[['legoID'=>'1234','pieceCount'=>'1234','legoName'=>''],'name'],
 			[['legoID'=>'1234','pieceCount'=>'1234','legoName'=>'12'],'name'],
 			[['legoID'=>'1234','pieceCount'=>'1234','legoName'=>'12345678901234567890123456789012345678901'],'name'],
 			[['legoID'=>'1234','pieceCount'=>'1234','legoName'=>'1234#'],'name'],
 
-			[['legoID'=>'1234','pieceCount'=>'1234','collection'=>''],'collection'],
+			//[['legoID'=>'1234','pieceCount'=>'1234','collection'=>''],'collection'],
 			[['legoID'=>'1234','pieceCount'=>'1234','collection'=>'12'],'collection'],
 			[['legoID'=>'1234','pieceCount'=>'1234','collection'=>'123456789012345678901'],'collection'],
 			[['legoID'=>'1234','pieceCount'=>'1234','collection'=>'1234#'],'collection'],
 
-			[['legoID'=>'1234','pieceCount'=>'1234','cost'=>''],'cost'],
+			//[['legoID'=>'1234','pieceCount'=>'1234','cost'=>''],'cost'],
 			[['legoID'=>'1234','pieceCount'=>'1234','cost'=>'05'],'cost'],
 			[['legoID'=>'1234','pieceCount'=>'1234','cost'=>'$05'],'cost'],
 			[['legoID'=>'1234','pieceCount'=>'1234','cost'=>'$$123'],'cost'],

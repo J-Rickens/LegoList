@@ -5,18 +5,33 @@ namespace Src\User\Add\LegoList;
 require __DIR__ . '\\..\\..\\..\\..\\vendor\\autoload.php';
 
 use Src\Shared\Classes\DbhClass;
+use Src\Shared\Exceptions\StmtFailedException;
 
-class LegoListClass extends DbhClass {
+class LegoListClass {
 
-	protected function setLegoList($listName, $pubPri, $uid) {
-		global $openerTp;
+	private $dbh;
+
+	public function __construct($dbh = null) {
+		if (is_null($dbh))
+		{
+			$this->dbh = new DbhClass();
+		}
+		else
+		{
+			$this->dbh = $dbh;
+		}
+	}
+
+	public function setLegoList(array $legoListVals): void {//$listName, $pubPri, $uid) {
+		//global $openerTp;
 		
-		$stmt = $this->connect()->prepare('INSERT INTO user_lists (list_name, public, owner_id) VALUES (?, ?, ?);');
+		$stmt = $this->dbh->prepStmt('INSERT INTO user_lists (list_name, public, owner_id) VALUES (?, ?, ?);');
 		
-		if (!$stmt->execute(array($listName, $pubPri, $uid))) {
-			$stmt = null;
-			header('location: ' . $openerTp->getUrlReturn() . 'User/Add/LegoList/index.php?error=setstmtfailed');
-			exit();
+		if (!$this->dbh->execStmt(array($legoListVals['listName'], $legoListVals['pubPri'], $legoListVals['uid']))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('setstmtfailed');
+			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/LegoList/index.php?error=setstmtfailed');
+			//exit();
 		}
 	}
 

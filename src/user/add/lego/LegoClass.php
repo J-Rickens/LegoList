@@ -22,14 +22,14 @@ class LegoClass {
 		}
 	}
 
-	public function setLego(array $legoVal) {
+	public function setLego(array $legoVals) {
 		//global $openerTp;
 		
 		// check if any of the values are not null and add to statment
-		$opColNames = array('name'=>$legoVal['legoName'], 'collection'=>$legoVal['collection'], 'cost'=>$legoVal['cost']);
+		$opColNames = array('name'=>$legoVals['legoName'], 'collection'=>$legoVals['collection'], 'cost'=>$legoVals['cost']);
 		$stmtP1 = 'INSERT INTO legos (lego_id, piece_count';
 		$stmtP2 = ') VALUES (?, ?';
-		$stmtInputs = array($legoVal['legoID'], $legoVal['pieceCount']);
+		$stmtInputs = array($legoVals['legoID'], $legoVals['pieceCount']);
 		foreach ($opColNames as $key => $value) {
 			if (!empty($value)) {
 				$stmtP1 = $stmtP1 . ', ' . $key;

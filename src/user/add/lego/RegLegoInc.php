@@ -17,7 +17,7 @@ $openerTp->setUrlReturn(3);
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	// Grabbing data
-	$legoVal = array(
+	$legoVals = array(
 		'legoID'=> htmlspecialchars($_POST['legoID'], ENT_QUOTES, 'UTF-8'),
 		'pieceCount'=> htmlspecialchars($_POST['pieceCount'], ENT_QUOTES, 'UTF-8'),
 		'legoName'=> htmlspecialchars($_POST['legoName'], ENT_QUOTES, 'UTF-8'),
@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 	$uid = htmlspecialchars($_POST['uid'], ENT_QUOTES, 'UTF-8');
 
 	// Instantiate RegisterContr Class
-	$lego = new LegoContrClass($legoVal);
+	$lego = new LegoContrClass($legoVals);
 
 	// Running error handlers and user signup
 	try {
