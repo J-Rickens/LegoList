@@ -1,81 +1,17 @@
 <?php 
 
 declare(strict_types = 1);
-namespace test\unit\User\Add\Lego;
+namespace Test\Unit\User\Add\Lego;
+require __DIR__ . '\\..\\..\\..\\..\\..\\vendor\\autoload.php';
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Test\Mock\Classes\MockDbhClass;
+use Test\Mock\Exceptions\SuccessException;
 
 use Src\Shared\Exceptions\StmtFailedException;
 use Src\User\Add\Lego\LegoClass;
 
-class SuccessException2 extends \Exception {}
-class MockStmt
-{
-	private $rows;
-	private $count;
-
-	public function __construct(array $rows = array(), int $count = 0)
-	{
-		$this->rows = $rows;
-		$this->count = $count;
-	}
-
-	public function rowCount(): int
-	{
-		return $this->count;
-	}
-}
-class MockDbh
-{
-	private $stmt;
-	private $stmtCount;
-	private $stmtStatus;
-
-	public function prepStmt(string $stmt): void
-	{
-		if(str_starts_with($stmt, 'SELECT')) {
-			$this->stmtCount = substr_count($stmt, '?');
-			$this->stmt = true;
-			$this->stmtStatus = true;
-		}
-		elseif (str_starts_with($stmt, 'INSERT')) {
-			$this->stmtCount = substr_count($stmt, '?');
-			$this->stmt = false;
-			$this->stmtStatus = true;
-		}
-		else {
-			$this->stmtStatus = false;
-			$this->stmt = false;
-			$this->stmtCount = 0;
-		}
-	}
-
-	public function execStmt(array $stmtInputs): bool
-	{
-		if ($this->stmtStatus & ($this->stmtCount == count($stmtInputs)) & !is_null($stmtInputs[0])) {
-			if ($this->stmt) {
-				$count = (int)$stmtInputs[0] % 2;
-				$this->stmt = new MockStmt(array(), $count);
-				return true;
-			}
-			else {
-				throw new SuccessException2();
-				return true;
-			}
-		}
-		else {
-			return false;
-		}
-	}
-
-	public function getStmt()
-	{
-		return $this->stmt;
-	}
-
-	public function setStmtNull(): void {}
-}
 
 class LegoClassTest extends TestCase
 {
@@ -85,7 +21,7 @@ class LegoClassTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->lego = new LegoClass(new MockDbh());
+		$this->lego = new LegoClass(new MockDbhClass());
 	}
 
 	public function testCheckLegoExistMockFailedStmt(): void
@@ -117,7 +53,7 @@ class LegoClassTest extends TestCase
 		array $legoVal
 	): void
 	{
-		$this->expectException(SuccessException2::class);
+		$this->expectException(SuccessException::class);
 		$this->lego->setLego($legoVal);
 	}
 	public static function setLegoValidCases(): array

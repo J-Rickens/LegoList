@@ -1,29 +1,17 @@
 <?php 
 
 declare(strict_types = 1);
-namespace test\unit\User\Add\Lego;
+namespace Test\Unit\User\Add\Lego;
+require __DIR__ . '\\..\\..\\..\\..\\..\\vendor\\autoload.php';
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Test\Mock\Classes\MockLegoClass;
+use Test\Mock\Exceptions\SuccessException;
 
 use Src\Shared\Exceptions\InvalidInputException;
 use Src\User\Add\Lego\LegoContrClass;
 
-
-class SuccessException extends \Exception {}
-class MockLegoClass
-{
-	public function checkLegoExist($id): bool
-	{
-		$ids = array('111','222','333','444');
-		return in_array($id, $ids);
-	}
-
-	public function setLego(array $legoVal): void
-	{
-		throw new SuccessException();
-	}
-}
 
 class LegoContrClassTest extends TestCase
 {

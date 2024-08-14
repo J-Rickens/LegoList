@@ -1,7 +1,8 @@
 <?php 
 
 declare(strict_types = 1);
-namespace test\unit\Shared\Tp;
+namespace Test\Unit\Shared\Tp;
+require __DIR__ . '\\..\\..\\..\\..\\vendor\\autoload.php';
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
