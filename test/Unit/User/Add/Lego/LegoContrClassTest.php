@@ -11,7 +11,7 @@ use Src\User\Add\Lego\LegoContrClass;
 
 
 class SuccessException extends \Exception {}
-class TempLegoClass
+class MockLegoClass
 {
 	public function checkLegoExist($id): bool
 	{
@@ -34,7 +34,7 @@ class LegoContrClassTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->legoContr = new LegoContrClass(array(), new TempLegoClass());
+		$this->legoContr = new LegoContrClass(array(), new MockLegoClass());
 	}
 
 	public function testEmptyInitialLegoValIsNull(): void
