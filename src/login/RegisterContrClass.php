@@ -6,111 +6,150 @@ require __DIR__ . '\\..\\..\\vendor\\autoload.php';
 
 use Src\Login\RegisterClass;
 use Src\Shared\Regex\LoginRegex;
+use Src\Shared\Exceptions\InvalidInputException;
 
-class RegisterContrClass extends RegisterClass {
+class RegisterContrClass {
 
-	private $name;
-	private $email;
-	private $usna;
-	private $pwd;
-	private $pwd2;
+	private $registerClass;
+	private $userVals = array(
+		'name'=>null,
+		'email'=>null,
+		'usna'=>null,
+		'pwd'=>null,
+		'pwd2'=>null
+	);
 
-	public function __construct($name, $email, $usna, $pwd, $pwd2) {
-		$this->name = $name;
-		$this->email = $email;
-		$this->usna = $usna;
-		$this->pwd = $pwd;
-		$this->pwd2 = $pwd2;
+	public function __construct(array $userVals = array(), $registerClass = null) {
+		if (is_null($registerClass)) {
+			$this->registerClass = new RegisterClass();
+		}
+		else {
+			$this->registerClass = $registerClass;
+		}
+
+		foreach ($userVals as $key => $value) {
+			$this->userVals[$key] = $value;
+		}
+	}
+
+	public function setUserVals(array $userVals): void
+	{
+		foreach ($userVals as $key => $value) {
+			$this->userVals[$key] = $value;
+		}
+	}
+
+	public function getUserVals(bool $getFull = true, array $valNames = array()): array
+	{
+		if ($getFull) {
+			return $this->userVals;
+		}
+		else {
+			$returnArray = array();
+			foreach ($valNames as $key) {
+				$returnArray[$key] = $this->userVals[$key];
+			}
+			return $returnArray;
+		}
 	}
 
 	// Run Error Checks and register user if possible
-	public function registerUser() {
-		global $openerTp;
+	public function registerUser(array $userVals = array()): void {
+		$this->setUserVals($userVals);
+
+		//global $openerTp;
 
 		if ($this->ecEmptyInput()) {
 			// echo 'Empty Value(s)';
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=emptyinput');
-			exit();
+			throw new InvalidInputException('emptyinput');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=emptyinput');
+			//exit();
 		}
 
 		if (!$this->ecValidName()) {
 			// echo 'Invalid Name';
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=name');
-			exit();
+			throw new InvalidInputException('name');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=name');
+			//exit();
 		}
 
 		if (!$this->ecValidUsna()) {
 			// echo 'Invalid Username';
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=username');
-			exit();
+			throw new InvalidInputException('username');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=username');
+			//exit();
 		}
 
 		if (!$this->ecValidEmail()) {
 			// echo 'Invalid Email';
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=email');
-			exit();
+			throw new InvalidInputException('email');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=email');
+			//exit();
 		}
 
-		if ($this->checkUserExist($this->usna, $this->email)) {
+		if ($this->registerClass->checkUserExist($this->userVals['usna'], $this->userVals['email'])) {
 			// echo 'Username or Email Taken';
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=useroremailtaken');
-			exit();
+			throw new InvalidInputException('useroremailtaken');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=useroremailtaken');
+			//exit();
 		}
 
 		if (!$this->ecValidPwd()) {
 			// echo 'Invalid Password';
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=password');
-			exit();
+			throw new InvalidInputException('password');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=password');
+			//exit();
 		}
 
 		if (!$this->ecPwdMatch()) {
 			// echo 'Passwords Didn't Match';
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=passworddmatch');
-			exit();
+			throw new InvalidInputException('passworddmatch');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=passworddmatch');
+			//exit();
 		}
 		
-		$this->setUser($this->usna, $this->email, $this->name, $this->pwd);
+		$this->registerClass->setUser($this->userVals);
 	}
 
 
 	// Error Checks: empty, valid, pwd match, usna/email taken (extended)
-	private function ecEmptyInput() {
-		if (empty($this->name) || empty($this->email) || empty($this->usna) || empty($this->pwd) || empty($this->pwd2)){
+	private function ecEmptyInput(): bool {
+		if (empty($this->userVals['name']) || empty($this->userVals['email']) || empty($this->userVals['usna']) || empty($this->userVals['pwd']) || empty($this->userVals['pwd2'])){
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidName() {
-		if (preg_match('/'. LoginRegex::NAME .'/', $this->name)) {
+	private function ecValidName(): bool {
+		if (preg_match('/'. LoginRegex::NAME .'/', $this->userVals['name'])) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidEmail() {
-		if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+	private function ecValidEmail(): bool {
+		if (filter_var($this->userVals['email'], FILTER_VALIDATE_EMAIL)) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidUsna() {
-		if (preg_match('/'. LoginRegex::USNA .'/', $this->usna)) {
+	private function ecValidUsna(): bool {
+		if (preg_match('/'. LoginRegex::USNA .'/', $this->userVals['usna'])) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidPwd() {
-		if (preg_match('/'. LoginRegex::PWD .'/', $this->pwd)) {
+	private function ecValidPwd(): bool {
+		if (preg_match('/'. LoginRegex::PWD .'/', $this->userVals['pwd'])) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecPwdMatch() {
-		if ($this->pwd != $this->pwd2) {
+	private function ecPwdMatch(): bool {
+		if ($this->userVals['pwd'] != $this->userVals['pwd2']) {
 			return false;
 		}
 		return true;

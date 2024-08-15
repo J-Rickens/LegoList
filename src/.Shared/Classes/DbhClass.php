@@ -8,7 +8,7 @@ class DbhClass {
 
 	private $stmt;
 
-	protected function connect() {
+	private function connect() {
 		try {
 			$username = "root";
 			$password = "";

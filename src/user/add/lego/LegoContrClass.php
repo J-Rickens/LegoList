@@ -11,13 +11,15 @@ use Src\Shared\Exceptions\InvalidInputException;
 class LegoContrClass {
 
 	private $legoClass;
-	private $legoVals = array('legoID'=>null,
+	private $legoVals = array(
+		'legoID'=>null,
 		'pieceCount'=>null,
 		'legoName'=>null,
 		'collection'=>null,
-		'cost'=>null);
+		'cost'=>null
+	);
 
-	public function __construct(array $legoVals, $legoClass = null) {
+	public function __construct(array $legoVals = array(), $legoClass = null) {
 		if (is_null($legoClass)) {
 			$this->legoClass = new LegoClass();
 		}

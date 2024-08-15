@@ -5,35 +5,51 @@ namespace Src\Login;
 require __DIR__ . '\\..\\..\\vendor\\autoload.php';
 
 use Src\Shared\Classes\DbhClass;
+use Src\Shared\Exceptions\StmtFailedException;
 
-class RegisterClass extends DbhClass {
+class RegisterClass {
 
-	protected function setUser($usna, $email, $name, $pwd) {
-		global $openerTp;
+	private $dbh;
 
-		$stmt = $this->connect()->prepare('INSERT INTO users (username, email, name, password) VALUES (?, ?, ?, ?);');
-
-		$hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
-
-		if (!$stmt->execute(array($usna, $email, $name, $hashedPwd))) {
-			$stmt = null;
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=setstmtfailed');
-			exit();
+	public function __construct($dbh = null) {
+		if (is_null($dbh))
+		{
+			$this->dbh = new DbhClass();
+		}
+		else
+		{
+			$this->dbh = $dbh;
 		}
 	}
 
-	protected function checkUserExist($usna, $email) {
-		global $openerTp;
+	public function setUser(array $userVals): void {
+		//global $openerTp;
 
-		$stmt = $this->connect()->prepare('SELECT username FROM users WHERE username = ? OR email = ?;');
+		$this->dbh->prepStmt('INSERT INTO users (username, email, name, password) VALUES (?, ?, ?, ?);');
 
-		if (!$stmt->execute(array($usna, $email))) {
-			$stmt = null;
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=checkstmtfailed');
-			exit();
+		$hashedPwd = password_hash($userVals['pwd'], PASSWORD_DEFAULT);
+
+		if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['email'], $userVals['name'], $hashedPwd))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('setstmtfailed');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=setstmtfailed');
+			//exit();
+		}
+	}
+
+	public function checkUserExist($usna, $email): bool {
+		//global $openerTp;
+
+		$this->dbh->prepStmt('SELECT username FROM users WHERE username = ? OR email = ?;');
+
+		if (!$this->dbh->execStmt(array($usna, $email))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('checkstmtfailed');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=checkstmtfailed');
+			//exit();
 		}
 
-		if ($stmt->rowCount() > 0) {
+		if ($this->dbh->getStmt()->rowCount() > 0) {
 			return true;
 		}
 		return false;

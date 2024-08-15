@@ -5,47 +5,66 @@ namespace Src\Login;
 require __DIR__ . '\\..\\..\\vendor\\autoload.php';
 
 use Src\Shared\Classes\DbhClass;
+use Src\Shared\Exceptions\StmtFailedException;
 
-class LoginClass extends DbhClass {
+class LoginClass {
 
-	protected function getUser($usna, $pwd) {
-		global $openerTp;
+	private $dbh;
+
+	public function __construct($dbh = null) {
+		if (is_null($dbh))
+		{
+			$this->dbh = new DbhClass();
+		}
+		else
+		{
+			$this->dbh = $dbh;
+		}
+	}
+
+	public function getUser(array $userVals): void {
+		//global $openerTp;
 		
-		$stmt = $this->connect()->prepare('SELECT password FROM users WHERE username = ? OR email = ?;');
+		$this->dbh->prepStmt('SELECT password FROM users WHERE username = ? OR email = ?;');
 
-		if (!$stmt->execute(array($usna, $usna))) {
-			$stmt = null;
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=getstmtfailed');
-			exit();
+		if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['usna']))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('getstmtfailed');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=getstmtfailed');
+			//exit();
 		}
-		if ($stmt->rowCount() == 0) {
-			$stmt = null;
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=usernotfound');
-			exit();
+		if ($this->dbh->getStmt()->rowCount() == 0) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('usernotfound');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=usernotfound');
+			//exit();
 		}
 
-		$hashedPwds = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-		$checkPwd = password_verify($pwd, $hashedPwds[0]['password']);
+		$hashedPwds = $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
+		$checkPwd = password_verify($userVals['pwd'], $hashedPwds[0]['password']);
 		if ($checkPwd == false) {
-			$stmt = null;
-			header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=wrongpassword');
-			exit();
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('wrongpassword');
+			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=wrongpassword');
+			//exit();
 		}
 		elseif ($checkPwd == true) {
-			$stmt = $this->connect()->prepare('SELECT * FROM users WHERE username = ? OR email = ? AND password = ?;');
+			$this->dbh->prepStmt('SELECT * FROM users WHERE username = ? OR email = ? AND password = ?;');
 
-			if (!$stmt->execute(array($usna, $usna, $hashedPwds[0]['password']))) {
-				$stmt = null;
-				header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=getstmtfailed');
-				exit();
+			if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['usna'], $hashedPwds[0]['password']))) {
+				$this->dbh->setStmtNull();
+				throw new StmtFailedException('getstmtfailed');
+				//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=getstmtfailed');
+				//exit();
 			}
-			if ($stmt->rowCount() == 0) {
-				$stmt = null;
-				header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=usernotfound');
-				exit();
+			if ($this->dbh->getStmt()->rowCount() == 0) {
+				$this->dbh->setStmtNull();
+				throw new StmtFailedException('usernotfound');
+				//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=usernotfound');
+				//exit();
 			}
 
-			$user = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$user = $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
 
 			session_start();
 			$_SESSION['uid'] = $user[0]['user_id'];
@@ -54,7 +73,7 @@ class LoginClass extends DbhClass {
 			$_SESSION['userdate'] = $user[0]['date_created'];
 		}
 
-		$stmt = null;
+		$this->dbh->setStmtNull();
 	}
 
 }

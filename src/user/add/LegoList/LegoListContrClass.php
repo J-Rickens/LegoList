@@ -11,11 +11,13 @@ use Src\Shared\Exceptions\InvalidInputException;
 class LegoListContrClass {
 
 	private $legoListClass;
-	private $legoListVals = array('listName'=>null,
+	private $legoListVals = array(
+		'listName'=>null,
 		'pubPri'=>null,
-		'uid'=>null);
+		'uid'=>null
+	);
 
-	public function __construct(array $legoListVals, $legoListClass = null) {
+	public function __construct(array $legoListVals = array(), $legoListClass = null) {
 		if (is_null($legoListClass)) {
 			$this->legoListClass = new LegoListClass();
 		}
@@ -50,7 +52,7 @@ class LegoListContrClass {
 	}
 
 	// Run Error Checks and create list if possible
-	public function addLegoList(array $legoListVals = array()) {
+	public function addLegoList(array $legoListVals = array()): void {
 		$this->setLegoListVals($legoListVals);
 		//global $openerTp;
 		
@@ -91,7 +93,7 @@ class LegoListContrClass {
 
 
 	// Reformats pubPri as true/false
-	private function formatPubPri() {
+	private function formatPubPri(): void {
 		if ($this->legoListVals['pubPri'] == 'public') {
 			$this->legoListVals['pubPri'] = true;
 		}
@@ -101,28 +103,28 @@ class LegoListContrClass {
 	}
 
 	// Error Checks: empty, valid
-	private function ecEmptyInput() {
+	private function ecEmptyInput(): bool {
 		if (empty($this->legoListVals['listName']) || empty($this->legoListVals['pubPri']) || empty($this->legoListVals['uid'])){
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidName() {
+	private function ecValidName(): bool {
 		if (preg_match('/'. LegoListRegex::NAME .'/', $this->legoListVals['listName'])) {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidPubPri() {
+	private function ecValidPubPri(): bool {
 		if ($this->legoListVals['pubPri'] == 'public' || $this->legoListVals['pubPri'] == 'private') {
 			return true;
 		}
 		return false;
 	}
 
-	private function ecValidUID() {
+	private function ecValidUID(): bool {
 		if (preg_match('/^\d+$/', $this->legoListVals['uid'])) {
 			return true;
 		}

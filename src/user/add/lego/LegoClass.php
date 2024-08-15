@@ -22,7 +22,7 @@ class LegoClass {
 		}
 	}
 
-	public function setLego(array $legoVals) {
+	public function setLego(array $legoVals): void {
 		//global $openerTp;
 		
 		// check if any of the values are not null and add to statment
