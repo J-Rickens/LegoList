@@ -30,14 +30,14 @@ class LegoContrClass {
 		}
 	}
 
-	public function setLegoVal(array $legoVals): void
+	public function setLegoVals(array $legoVals): void
 	{
 		foreach ($legoVals as $key => $value) {
 			$this->legoVals[$key] = $value;
 		}
 	}
 
-	public function getLegoVal(bool $getFull = true, array $valNames = array()): array
+	public function getLegoVals(bool $getFull = true, array $valNames = array()): array
 	{
 		if ($getFull) {
 			return $this->legoVals;
@@ -53,7 +53,7 @@ class LegoContrClass {
 
 	// Run Error Checks and register lego if possible
 	public function addLego(array $legoVals = array()): void {
-		$this->setLegoVal($legoVals);
+		$this->setLegoVals($legoVals);
 
 		//global $openerTp;
 

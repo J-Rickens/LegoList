@@ -6,15 +6,9 @@ require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
 
 use Test\Mock\Exceptions\SuccessException;
 
-class MockLegoClass
+class MockLegoListClass
 {
-	public function checkLegoExist($id): bool
-	{
-		$ids = array('111','222','333','444');
-		return in_array($id, $ids);
-	}
-
-	public function setLego(array $legoVals): void
+	public function setLegoList(array $legoListVals): void
 	{
 		throw new SuccessException();
 	}

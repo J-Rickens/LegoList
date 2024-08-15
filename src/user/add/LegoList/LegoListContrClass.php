@@ -31,7 +31,7 @@ class LegoListContrClass {
 	public function setLegoListVals(array $legoListVals): void
 	{
 		foreach ($legoListVals as $key => $value) {
-			$this->legolistVals[$key] = $value;
+			$this->legoListVals[$key] = $value;
 		}
 	}
 

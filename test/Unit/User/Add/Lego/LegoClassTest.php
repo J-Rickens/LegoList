@@ -50,11 +50,11 @@ class LegoClassTest extends TestCase
 
 	#[DataProvider('setLegoValidCases')]
 	public function testSetLegoValid(
-		array $legoVal
+		array $legoVals
 	): void
 	{
 		$this->expectException(SuccessException::class);
-		$this->lego->setLego($legoVal);
+		$this->lego->setLego($legoVals);
 	}
 	public static function setLegoValidCases(): array
 	{

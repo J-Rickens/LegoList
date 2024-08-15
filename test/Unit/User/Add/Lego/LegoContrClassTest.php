@@ -29,7 +29,7 @@ class LegoContrClassTest extends TestCase
 	{
 		$lego = new LegoContrClass(array());
 
-		foreach ($lego->getLegoVal() as $key => $value) {
+		foreach ($lego->getLegoVals() as $key => $value) {
 			$this->assertNull($value, $key .' failed null');
 		}
 	}
@@ -44,14 +44,14 @@ class LegoContrClassTest extends TestCase
 			'cost'=>'not null'
 		));
 
-		foreach ($lego->getLegoVal() as $key => $value) {
+		foreach ($lego->getLegoVals() as $key => $value) {
 			$this->assertEquals('not null', $value, $key .' failed not null');
 		}
 	}
 
 	public function testSetLegoVal(): void
 	{
-		$this->legoContr->setLegoVal(array(
+		$this->legoContr->setLegoVals(array(
 			'legoID'=>'something',
 			'pieceCount'=>'something',
 			'legoName'=>'something',
@@ -59,18 +59,18 @@ class LegoContrClassTest extends TestCase
 			'cost'=>'something'
 		));
 
-		foreach ($this->legoContr->getLegoVal() as $key => $value) {
+		foreach ($this->legoContr->getLegoVals() as $key => $value) {
 			$this->assertEquals('something', $value, $key .' failed set');
 		}
 	}
 
 	#[DataProvider('addLegoValidCases')]
 	public function testAddLegoValidInputs(
-		array $legoVal
+		array $legoVals
 	): void
 	{
 		$this->expectException(SuccessException::class);
-		$this->legoContr->addLego($legoVal);
+		$this->legoContr->addLego($legoVals);
 	}
 	public static function addLegoValidCases(): array
 	{
@@ -89,13 +89,13 @@ class LegoContrClassTest extends TestCase
 
 	#[DataProvider('addLegoInvalidCases')]
 	public function testAddLegoInvalidInputs(
-		array $legoVal,
+		array $legoVals,
 		string $errorMessage
 	): void
 	{
 		$this->expectException(InvalidInputException::class);
 		$this->expectExceptionMessage($errorMessage);
-		$this->legoContr->addLego($legoVal);
+		$this->legoContr->addLego($legoVals);
 		
 
 	}
