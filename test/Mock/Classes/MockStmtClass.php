@@ -15,8 +15,11 @@ class MockStmtClass
 		$this->count = $count;
 	}
 
-	public function rowCount(): int
-	{
+	public function rowCount(): int {
 		return $this->count;
+	}
+
+	public function fetchAll($PDOFetchVal): array {
+		return $this->rows;
 	}
 }

@@ -25,7 +25,7 @@ class LegoContrClassTest extends TestCase
 		$this->legoContr = new LegoContrClass(array(), new MockLegoClass());
 	}
 
-	public function testEmptyInitialLegoValIsNull(): void
+	public function testEmptyInitialLegoValsIsNull(): void
 	{
 		$lego = new LegoContrClass(array());
 
@@ -34,7 +34,7 @@ class LegoContrClassTest extends TestCase
 		}
 	}
 
-	public function testInitialLegoValWhenNotNull(): void
+	public function testInitialLegoValsWhenNotNull(): void
 	{
 		$lego = new LegoContrClass(array(
 			'legoID'=>'not null',
@@ -49,7 +49,7 @@ class LegoContrClassTest extends TestCase
 		}
 	}
 
-	public function testSetLegoVal(): void
+	public function testSetLegoVals(): void
 	{
 		$this->legoContr->setLegoVals(array(
 			'legoID'=>'something',
@@ -96,8 +96,6 @@ class LegoContrClassTest extends TestCase
 		$this->expectException(InvalidInputException::class);
 		$this->expectExceptionMessage($errorMessage);
 		$this->legoContr->addLego($legoVals);
-		
-
 	}
 	public static function addLegoInvalidCases(): array
 	{

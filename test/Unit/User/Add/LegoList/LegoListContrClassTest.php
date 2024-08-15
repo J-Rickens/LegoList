@@ -25,7 +25,7 @@ class LegoListContrClassTest extends TestCase
 		$this->legoListContr = new LegoListContrClass(array(), new MockLegoListClass());
 	}
 
-	public function testEmptyInitialLegoValIsNull(): void
+	public function testEmptyInitialLegoListValsIsNull(): void
 	{
 		$legoList = new LegoListContrClass(array());
 
@@ -34,7 +34,7 @@ class LegoListContrClassTest extends TestCase
 		}
 	}
 
-	public function testInitialLegoValWhenNotNull(): void
+	public function testInitialLegoListValsWhenNotNull(): void
 	{
 		$legoList = new LegoListContrClass(array(
 			'listName'=>'not null',

@@ -5,6 +5,7 @@ namespace Test\Mock\Classes;
 require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
 
 use Test\Mock\Classes\MockStmtClass;
+use Test\Mock\Exceptions\FailedException;
 use Test\Mock\Exceptions\SuccessException;
 
 class MockDbhClass
@@ -34,8 +35,11 @@ class MockDbhClass
 
 	public function execStmt(array $stmtInputs): bool
 	{
-		if ($this->stmtStatus & ($this->stmtCount == count($stmtInputs)) & !is_null($stmtInputs[0])) {
-			if ($this->stmt) {
+		if ($this->stmtStatus & ($this->stmtCount == count($stmtInputs))) {
+			if (is_null($stmtInputs[0])) {
+				return false;
+			}
+			elseif ($this->stmt) {
 				$count = (int)$stmtInputs[0] % 2;
 				$this->stmt = new MockStmtClass(array(), $count);
 				return true;
@@ -46,7 +50,7 @@ class MockDbhClass
 			}
 		}
 		else {
-			return false;
+			throw new FailedException();
 		}
 	}
 
