@@ -16,37 +16,45 @@ use Src\Login\LoginClass;
 class LoginClassTest extends TestCase
 {
 
+	private $dbh;
 	private LoginClass $login;
 
 	protected function setUp(): void
 	{
 		parent::setUp();
 
-		$this->login = new LoginClass(new MockDbhClass());
+		$this->dbh = new MockDbhClass();
+		$this->login = new LoginClass($this->dbh);
 	}
 
 	/*#[DataProvider('getUserValidCases')]
 	public function testGetUserValidInputs(
-		array $userVals
+		array $userVals,
+		array $testCode,
+		array $rows
 	): void
 	{
+		$this->dbh->setTestingConditions($testCode, $rows);
 		$this->expectException(SuccessException::class);
 		$this->login->getUser($userVals);
 	}
 	public static function getUserValidCases(): array
 	{
 		return [
-			[['usna'=>'username','pwd'=>'password']],
-			[['usna'=>'1','pwd'=>'1']]
+			[['usna'=>'username','pwd'=>'password'],[['stmtFail'=>false, 'fetch'=>false, 'exists'=>false]],[[]]],
+			[['usna'=>'1','pwd'=>'1'],[['stmtFail'=>false, 'fetch'=>false, 'exists'=>false]],[[]]]
 		];
 	}*/
 
 	#[DataProvider('getUserInvalidCases')]
 	public function testGetUserInvalidInputs(
 		array $userVals,
-		string $errorMessage
+		array $testCode,
+		string $errorMessage,
+		array $rows
 	): void
 	{
+		$this->dbh->setTestingConditions($testCode,$rows);
 		$this->expectException(StmtFailedException::class);
 		$this->expectExceptionMessage($errorMessage);
 		$this->login->getUser($userVals);
@@ -54,11 +62,11 @@ class LoginClassTest extends TestCase
 	public static function getUserInvalidCases(): array
 	{
 		return [
-			//[['usna'=>'','pwd'=>''],'getstmtfailed'],
-			//[['usna'=>'1','pwd'=>''],'usernotfound'],
-			//[['usna'=>'','pwd'=>'1'],'wrongpassword'],
-			[['usna'=>null,'pwd'=>null],'getstmtfailed'],
-			//[['usna'=>'1','pwd'=>null],'usernotfound'],
+			[['usna'=>'','pwd'=>''],[['stmtFail'=>true]],'getstmtfailed',[[]]],
+			[['usna'=>'1','pwd'=>''],[['fetch'=>true, 'exists'=>false]],'usernotfound',[[]]],
+			//[['usna'=>'','pwd'=>'1'],[['fetch'=>true, 'exists'=>true]],'wrongpassword',[[]]],
+			[['usna'=>null,'pwd'=>null],[['stmtFail'=>true]],'getstmtfailed',[[]]],
+			[['usna'=>'1','pwd'=>null],[['fetch'=>true, 'exists'=>false]],'usernotfound',[[]]],
 		];
 	}
 }

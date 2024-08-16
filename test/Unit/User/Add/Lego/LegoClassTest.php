@@ -15,17 +15,20 @@ use Src\User\Add\Lego\LegoClass;
 
 class LegoClassTest extends TestCase
 {
+	private $dbh;
 	private LegoClass $lego;
 
 	protected function setUp(): void
 	{
 		parent::setUp();
 
-		$this->lego = new LegoClass(new MockDbhClass());
+		$this->dbh = new MockDbhClass();
+		$this->lego = new LegoClass($this->dbh);
 	}
 
 	public function testCheckLegoExistMockFailedStmt(): void
 	{
+		$this->dbh->setTestingConditions([['stmtFail'=>true]]);
 		$this->expectException(StmtFailedException::class);
 		$this->expectExceptionMessage('checkstmtfailed');
 		$this->lego->checkLegoExist(null);
@@ -33,16 +36,19 @@ class LegoClassTest extends TestCase
 
 	public function testCheckLegoExistIfTrue(): void
 	{
-		$this->assertTrue($this->lego->checkLegoExist('123'));
+		$this->dbh->setTestingConditions([['fetch'=>true, 'exists'=>true]]);
+		$this->assertTrue($this->lego->checkLegoExist('1'));
 	}
 
 	public function testCheckLegoExistIfFalse(): void
 	{
-		$this->assertFalse($this->lego->checkLegoExist('1234'));
+		$this->dbh->setTestingConditions([['fetch'=>true, 'exists'=>false]]);
+		$this->assertFalse($this->lego->checkLegoExist('1'));
 	}
 
 	public function testSetLegoMockFailedStmt(): void
 	{
+		$this->dbh->setTestingConditions([['stmtFail'=>true]]);
 		$this->expectException(StmtFailedException::class);
 		$this->expectExceptionMessage('setstmtfailed');
 		$this->lego->setLego(array('legoID'=>null,'pieceCount'=>null,'legoName'=>null,'collection'=>null,'cost'=>null));
@@ -50,21 +56,23 @@ class LegoClassTest extends TestCase
 
 	#[DataProvider('setLegoValidCases')]
 	public function testSetLegoValid(
-		array $legoVals
+		array $legoVals,
+		array $testCode
 	): void
 	{
+		$this->dbh->setTestingConditions($testCode);
 		$this->expectException(SuccessException::class);
 		$this->lego->setLego($legoVals);
 	}
 	public static function setLegoValidCases(): array
 	{
 		return [
-			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>'1', 'collection'=>'1', 'cost'=>'1' ]],
-			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>'1', 'collection'=>'1', 'cost'=>null]],
-			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>'1', 'collection'=>null,'cost'=>null]],
-			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>null,'collection'=>'1', 'cost'=>'1' ]],
-			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>null,'collection'=>null,'cost'=>'1' ]],
-			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>null,'collection'=>null,'cost'=>null]]
+			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>'1', 'collection'=>'1', 'cost'=>'1' ],[[]]],
+			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>'1', 'collection'=>'1', 'cost'=>null],[[]]],
+			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>'1', 'collection'=>null,'cost'=>null],[[]]],
+			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>null,'collection'=>'1', 'cost'=>'1' ],[[]]],
+			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>null,'collection'=>null,'cost'=>'1' ],[[]]],
+			[['legoID'=>'1234','pieceCount'=>'1','legoName'=>null,'collection'=>null,'cost'=>null],[[]]]
 		];
 	}
 }

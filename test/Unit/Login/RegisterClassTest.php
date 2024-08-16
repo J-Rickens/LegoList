@@ -16,17 +16,20 @@ use Src\Login\RegisterClass;
 class RegisterClassTest extends TestCase
 {
 
+	private $dbh;
 	private RegisterClass $register;
 
 	protected function setUp(): void
 	{
 		parent::setUp();
 
-		$this->register = new RegisterClass(new MockDbhClass());
+		$this->dbh = new MockDbhClass();
+		$this->register = new RegisterClass($this->dbh);
 	}
 
 	public function testCheckUserExistMockFailedStmt(): void
 	{
+		$this->dbh->setTestingConditions([['stmtFail'=>true]]);
 		$this->expectException(StmtFailedException::class);
 		$this->expectExceptionMessage('checkstmtfailed');
 		$this->register->checkUserExist(null,null);
@@ -34,24 +37,28 @@ class RegisterClassTest extends TestCase
 
 	public function testCheckUserExistIfTrue(): void
 	{
-		$this->assertTrue($this->register->checkUserExist('123','e'));
+		$this->dbh->setTestingConditions([['fetch'=>true, 'exists'=>true]]);
+		$this->assertTrue($this->register->checkUserExist('1','e'));
 	}
 
 	public function testCheckUserExistIfFalse(): void
 	{
-		$this->assertFalse($this->register->checkUserExist('1234','e'));
+		$this->dbh->setTestingConditions([['fetch'=>true, 'exists'=>false]]);
+		$this->assertFalse($this->register->checkUserExist('1','e'));
 	}
 
 	public function testSetUserInvalidInputs(): void
 	{
+		$this->dbh->setTestingConditions([['stmtFail'=>true]]);
 		$this->expectException(StmtFailedException::class);
 		$this->expectExceptionMessage('setstmtfailed');
-		$this->register->setUser(array('usna'=>null, 'email'=>'1', 'name'=>'1', 'pwd'=>'1'));
+		$this->register->setUser(array('usna'=>null, 'email'=>null, 'name'=>null, 'pwd'=>'1'));
 	}
 
 	public function testSetUserValidInputs(): void
 	{
+		$this->dbh->setTestingConditions([[]]);
 		$this->expectException(SuccessException::class);
-		$this->register->setUser(array('usna'=>'1234', 'email'=>'1', 'name'=>'1', 'pwd'=>'1'));
+		$this->register->setUser(array('usna'=>'1', 'email'=>'1', 'name'=>'1', 'pwd'=>'1'));
 	}
 }

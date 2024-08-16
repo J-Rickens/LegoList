@@ -15,17 +15,20 @@ use Src\User\Add\LegoList\LegoListClass;
 
 class LegoListClassTest extends TestCase
 {
+	private $dbh;
 	private LegoListClass $legoList;
 
 	protected function setUp(): void
 	{
 		parent::setUp();
 
-		$this->legoList = new LegoListClass(new MockDbhClass());
+		$this->dbh = new MockDbhClass();
+		$this->legoList = new LegoListClass($this->dbh);
 	}
 
 	public function testSetLegoMockFailedStmt(): void
 	{
+		$this->dbh->setTestingConditions([['stmtFail'=>true]]);
 		$this->expectException(StmtFailedException::class);
 		$this->expectExceptionMessage('setstmtfailed');
 		$this->legoList->setLegoList(['listName'=>null,'pubPri'=>null,'uid'=>null]);
@@ -33,18 +36,20 @@ class LegoListClassTest extends TestCase
 
 	#[DataProvider('setLegoListValidCases')]
 	public function testSetLegoListValid(
-		array $legoListVals
+		array $legoListVals,
+		array $testCode
 	): void
 	{
+		$this->dbh->setTestingConditions($testCode);
 		$this->expectException(SuccessException::class);
 		$this->legoList->setLegoList($legoListVals);
 	}
 	public static function setLegoListValidCases(): array
 	{
 		return [
-			[['listName'=>'1','pubPri'=>true,'uid'=>'1']],
-			[['listName'=>'1','pubPri'=>False,'uid'=>'1']],
-			[['listName'=>'Name 1','pubPri'=>true,'uid'=>'1']]
+			[['listName'=>'1','pubPri'=>true,'uid'=>'1'],[[]]],
+			[['listName'=>'1','pubPri'=>False,'uid'=>'1'],[[]]],
+			[['listName'=>'Name 1','pubPri'=>true,'uid'=>'1'],[[]]]
 		];
 	}
 }
