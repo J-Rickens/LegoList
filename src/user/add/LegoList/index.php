@@ -11,12 +11,11 @@ use Src\Shared\Regex\LegoListRegex;
 
 global $openerTp;
 $openerTp = new OpenerTp();
-$openerTp->startSession();
 $openerTp->setUrlReturn(3);
 $urlTitle = 'AddList';
 
 // Redurect user if not loged in
-if (!isset($_SESSION['uid'])) {
+if ($openerTp->startSession()) {
 	header('location: '. $openerTp->getUrlReturn() .'Login');
 }
 

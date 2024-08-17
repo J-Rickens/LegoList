@@ -10,12 +10,11 @@ use Src\Shared\Tp\FooterTp;
 
 global $openerTp;
 $openerTp = new OpenerTp();
-$openerTp->startSession();
 $openerTp->setUrlReturn(2);
 $urlTitle = 'Editor';
 
 // Redurect user if not loged in
-if (!isset($_SESSION['uid'])) {
+if ($openerTp->startSession()) {
 	header('location: '. $openerTp->getUrlReturn() .'Login');
 }
 

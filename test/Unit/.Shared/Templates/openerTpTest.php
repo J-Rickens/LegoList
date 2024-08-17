@@ -13,34 +13,90 @@ use Src\Shared\Tp\OpenerTp;
 
 class OpenerTpTest extends TestCase
 {
-	private OpenerTp $openerTp;
+	private $openerTpMock;
 
 	protected function setUp(): void
 	{
 		parent::setUp();
 
-		$this->openerTp = new OpenerTp();
+		$this->openerTpMock = $this->getMockBuilder(OpenerTp::class)
+			->onlyMethods(['validate'])
+			->getMock();
 	}
 
 	public function testStartSessionWhenNoneExists(): void
 	{
+		//create validate mock always false
+		$this->openerTpMock->method('validate')->willReturn(false);
+
+		//clear session values
 		if (session_status() === PHP_SESSION_ACTIVE)
 		{
 			session_unset();
 			session_destroy();
 		}
-		$this->openerTp->startSession();
+
+		$this->assertTrue($this->openerTpMock->startSession());
 		$this->assertEquals(session_status(), PHP_SESSION_ACTIVE);
+		$this->assertFalse(isset($_SESSION['validator']));
 	}
 
-	public function testStartSessionWhenSessionExists(): void
+	public function testStartSessionWhenEmptySessionExists(): void
 	{
-		if (session_status() === PHP_SESSION_NONE)
+		//create validate mock always false
+		$this->openerTpMock->method('validate')->willReturn(false);
+
+		//clear session values
+		if (session_status() === PHP_SESSION_ACTIVE)
 		{
-			session_start();
+			session_unset();
+			session_destroy();
 		}
-		$this->openerTp->startSession();
+		session_start();
+
+		$this->assertTrue($this->openerTpMock->startSession());
 		$this->assertEquals(session_status(), PHP_SESSION_ACTIVE);
+		$this->assertFalse(isset($_SESSION['validator']));
+	}
+
+	public function testStartSessionWhenInvalidSessionExists(): void
+	{
+		//create validate mock always false
+		$this->openerTpMock->method('validate')->willReturn(false);
+
+		//clear session values
+		if (session_status() === PHP_SESSION_ACTIVE)
+		{
+			session_unset();
+			session_destroy();
+		}
+		session_start();
+		$_SESSION['uid'] = '1';
+		$_SESSION['validator'] = 'fake exists';
+
+		$this->assertTrue($this->openerTpMock->startSession());
+		$this->assertEquals(session_status(), PHP_SESSION_ACTIVE);
+		$this->assertFalse(isset($_SESSION['validator']));
+	}
+
+	public function testStartSessionWhenValidSessionExists(): void
+	{
+		//create validate mock always true
+		$this->openerTpMock->method('validate')->willReturn(true);
+
+		//clear session values
+		if (session_status() === PHP_SESSION_ACTIVE)
+		{
+			session_unset();
+			session_destroy();
+		}
+		session_start();
+		$_SESSION['uid'] = '1';
+		$_SESSION['validator'] = 'exists';
+
+		$this->assertFalse($this->openerTpMock->startSession());
+		$this->assertEquals(session_status(), PHP_SESSION_ACTIVE);
+		$this->assertTrue(isset($_SESSION['validator']));
 	}
 
 	#[DataProvider('urlReturnValidCases')]
@@ -48,8 +104,8 @@ class OpenerTpTest extends TestCase
 		int $urlLvl,
 		string $expectedReturn): void
 	{
-		$this->openerTp->setUrlReturn($urlLvl);
-		$this->assertEquals($this->openerTp->getUrlReturn(),$expectedReturn);
+		$this->openerTpMock->setUrlReturn($urlLvl);
+		$this->assertEquals($this->openerTpMock->getUrlReturn(),$expectedReturn);
 	}
 	public static function urlReturnValidCases(): array
 	{
@@ -63,9 +119,9 @@ class OpenerTpTest extends TestCase
 
 	public function testUrlReturnThrowErrorIfNotSet(): void
 	{
-		$openerTp = new OpenerTp();
+		$openerTpMock = new OpenerTp();
 		$this->expectException(UndefinedVariableException::class);
-		$openerTp->getUrlReturn();
+		$openerTpMock->getUrlReturn();
 	}
 
 }
