@@ -4,6 +4,7 @@
 	bootstrap="vendor/autoload.php"
 	displayDetailsOnTestsThatTriggerWarnings="true"
 	displayDetailsOnTestsThatTriggerDeprecations="true"
+	displayDetailsOnTestsThatTriggerNotices="true"
 	>
 	<testsuites>
 		<testsuite name="Unit Tests">

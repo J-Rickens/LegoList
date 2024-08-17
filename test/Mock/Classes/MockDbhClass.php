@@ -16,10 +16,10 @@ class MockDbhClass
 
 	private $setCodes = ['stmtFail'=>false, 'fetch'=>false, 'exists'=>false];
 	private $testingCode = [];
-	private $rows = [[]];
+	private $tables = [[[]]];
 	private $execCount = 0;
 
-	public function setTestingConditions(array $testingCode, array $rows = array([])): void
+	public function setTestingConditions(array $testingCode = [[]], array $tables = array([[]])): void
 	{
 		// testingCode is an array of true/false 1/0
 		foreach ($testingCode as $count => $codeSet) {
@@ -28,8 +28,22 @@ class MockDbhClass
 				$this->testingCode[$count][$key] = $value;
 			}
 		}
-		$this->rows = $rows;
+		$this->tables = $tables;
+		$this->hashPassword();
 		$this->execCount = 0;
+	}
+
+	private function hashPassword(): void
+	{
+		foreach ($this->tables as &$table) {
+			foreach ($table as &$row) {
+				foreach ($row as $key => $value) {
+					if ($key == 'password') {
+						$row[$key] = password_hash($value, PASSWORD_DEFAULT);
+					}
+				}
+			}
+		}
 	}
 
 	public function prepStmt(string $stmt): void
@@ -53,7 +67,7 @@ class MockDbhClass
 			}
 			if ($this->testingCode[$this->execCount]['fetch']) {
 				$count = (int)$this->testingCode[$this->execCount]['exists'];
-				$this->stmt = new MockStmtClass($this->rows[$this->execCount], $count);
+				$this->stmt = new MockStmtClass($this->tables[$this->execCount], $count);
 				$this->execCount += 1;
 				return true;
 			}

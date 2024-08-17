@@ -29,13 +29,13 @@ class LoginClass {
 
 		if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['usna']))) {
 			$this->dbh->setStmtNull();
-			throw new StmtFailedException('getstmtfailed');
+			throw new StmtFailedException('getstmtfailed1');
 			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=getstmtfailed');
 			//exit();
 		}
 		if ($this->dbh->getStmt()->rowCount() == 0) {
 			$this->dbh->setStmtNull();
-			throw new StmtFailedException('usernotfound');
+			throw new StmtFailedException('usernotfound1');
 			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=usernotfound');
 			//exit();
 		}
@@ -53,20 +53,27 @@ class LoginClass {
 
 			if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['usna'], $hashedPwds[0]['password']))) {
 				$this->dbh->setStmtNull();
-				throw new StmtFailedException('getstmtfailed');
+				throw new StmtFailedException('getstmtfailed2');
 				//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=getstmtfailed');
 				//exit();
 			}
 			if ($this->dbh->getStmt()->rowCount() == 0) {
 				$this->dbh->setStmtNull();
-				throw new StmtFailedException('usernotfound');
+				throw new StmtFailedException('usernotfound2');
 				//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=usernotfound');
 				//exit();
 			}
 
 			$user = $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
 
-			session_start();
+			if (session_status() === PHP_SESSION_NONE) {
+				session_start();
+			}
+			else {
+				session_unset();
+				session_destroy();
+				session_start();
+			}
 			$_SESSION['uid'] = $user[0]['user_id'];
 			$_SESSION['username'] = $user[0]['username'];
 			$_SESSION['name'] = $user[0]['name'];
