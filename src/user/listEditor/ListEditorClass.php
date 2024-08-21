@@ -22,26 +22,26 @@ class ListEditorClass {
 		}
 	}
 
-	public function checkLegoList($list_id, $uid): bool {
+	public function checkLegoList($list_id, $uid): array {
 		$this->dbh->prepStmt('SELECT owner_id FROM user_lists WHERE list_id = ?;');
 
 		if (!$this->dbh->execStmt(array($list_id))) {
 			$this->dbh->setStmtNull();
-			throw new StmtFailedException('getstmtfailed');
+			throw new StmtFailedException('checkstmtfailed');
 		}
 
 		if ($this->dbh->getStmt()->rowCount() == 0) {
 			$this->dbh->setStmtNull();
-			throw new StmtFailedException('listnotfound');
+			return [false, 'listnotfound'];
 		}
 
 		$owner_id = $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
 		$this->dbh->setStmtNull();
 		if ($owner_id[0]['owner_id'] != $uid) {
-			throw new StmtFailedException('listpermissionfail');
+			return [false, 'listpermissionfail'];
 		}
 
-		return true;
+		return [true, null];
 	}
 
 	public function getLegoListData($list_id): array {
@@ -49,7 +49,7 @@ class ListEditorClass {
 
 		if (!$this->dbh->execStmt(array($list_id))) {
 			$this->dbh->setStmtNull();
-			throw new StmtFailedException('getstmtfailed');
+			throw new StmtFailedException('getdatastmtfailed');
 		}
 
 		if ($this->dbh->getStmt()->rowCount() == 0) {
@@ -65,7 +65,7 @@ class ListEditorClass {
 
 		if (!$this->dbh->execStmt(array($list_id))) {
 			$this->dbh->setStmtNull();
-			throw new StmtFailedException('getstmtfailed');
+			throw new StmtFailedException('getlegosstmtfailed');
 		}
 
 		if ($this->dbh->getStmt()->rowCount() == 0) {

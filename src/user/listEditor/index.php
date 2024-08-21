@@ -8,6 +8,8 @@ use Src\Shared\Tp\OpenerTp;
 use Src\Shared\Tp\HeaderTp;
 use Src\Shared\Tp\FooterTp;
 use Src\User\ListEditor\ListEditorContrClass;
+use Src\Shared\Exceptions\StmtFailedException;
+use Src\Shared\Exceptions\InvalidInputException;
 
 global $openerTp;
 $openerTp = new OpenerTp();
@@ -25,14 +27,19 @@ $editor = new ListEditorContrClass();
 if (isset($_GET['list_id'])) {
 	// check if ID is valid
 	// check if user has access
-	if ($editor->checkListId($_GET['list_id'])) {
-		// set session variable and redirect to clean self
-		$_SESSION['list_id'] = $_GET['list_id'];
-		header('location: ' . $openerTp->getUrlReturn() . 'User/ListEditor');
-	}
-	else {
-		// else else redirect to dash with error
-		header('location: ' . $openerTp->getUrlReturn() . 'User/Dashboard/index.php?error=6');
+	try {
+		if ($editor->checkListId($_GET['list_id'])) {
+			// set session variable and redirect to clean self
+			$_SESSION['list_id'] = $_GET['list_id'];
+			header('location: ' . $openerTp->getUrlReturn() . 'User/ListEditor');
+		}
+		else {
+			// else else redirect to dash with error
+			header('location: ' . $openerTp->getUrlReturn() . 'User/Dashboard/index.php?error=' . $editor->getEMessage());
+		}
+	} catch (StmtFailedException $e) {
+		header('location: ' . $openerTp->getUrlReturn() . 'User/ListEditor/index.php?error=' . $e->getMessage());
+		exit();
 	}
 }
 // else na
@@ -105,7 +112,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 // check if session variable is set
 if (isset($_SESSION['list_id'])) {
 	// pull data
-	$editor->getListData();
+	try {
+		$editor->getListData();
+	} catch (StmtFailedException $e) {
+		header('location: ' . $openerTp->getUrlReturn() . 'User/ListEditor/index.php?error=' . $e->getMessage());
+		exit();
+	}
 }
 else {
 	// else redirect to dash with error

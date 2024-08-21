@@ -13,7 +13,8 @@ class ListEditorContrClass {
 
 	private $listEditorClass;
 	private $listEditorViewClass;
-	private $legoListVals = array(
+	private ?string $eMessage = null;
+	private array $legoListVals = array(
 		'list_id'=>null,
 		'listName'=>null,
 		'pubPri'=>null,
@@ -46,8 +47,17 @@ class ListEditorContrClass {
 		}
 	}
 
+
+
+	// initialization methods
 	public function checkListId($list_id): bool {
-		return $this->listEditorClass->checkLegoList($list_id, $_SESSION['uid']);
+		$checkResults = $this->listEditorClass->checkLegoList($list_id, $_SESSION['uid']);
+		$this->eMessage = $checkResults[1];
+		return $checkResults[0];
+	}
+
+	public function getEMessage(): string {
+		return $this->eMessage;
 	}
 
 	public function getListData(): void {
@@ -63,6 +73,9 @@ class ListEditorContrClass {
 		$this->legoListLegos = $this->listEditorClass->getLegoListLegos($_SESSION['list_id']);
 	}
 
+
+
+	// post data manipulater methods
 	public function updateLegoList(array $legoListVals): void {
 
 	}
@@ -75,6 +88,11 @@ class ListEditorContrClass {
 		$this->listEditorClass->deleteLegoFromList($removeLegoVals);
 	}
 
+	// post data validation methods
+
+
+
+	// view methods
 	public function viewListDataForm(): void {
 		$this->listEditorViewClass->echoListDataForm($this->legoListVals);
 	}
