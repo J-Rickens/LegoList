@@ -4,15 +4,16 @@ declare(strict_types = 1);
 namespace Src\Shared\Classes;
 require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
 
-class DbhClass {
+use Src\Shared\Classes\DbhLoginClass;
+
+class DbhClass extends DbhLoginClass {
 
 	private $stmt;
 
 	protected function connect() {
 		try {
-			$username = "root";
-			$password = "";
-			$dbh = new \PDO('mysql:host=localhost;dbname=db_ws_lego_php', $username, $password);
+			
+			$dbh = new \PDO(self::DBPATH, self::USERNAME, self::PASSWORD);
 			return $dbh;
 			
 		} catch (\PDOException $e) {
