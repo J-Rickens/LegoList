@@ -1,23 +1,25 @@
 <?php 
 
 declare(strict_types = 1);
-namespace Src\Dashboard;
+namespace Src\User\Dashboard;
 require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
 
 use Src\Shared\Tp\OpenerTp;
 use Src\Shared\Tp\HeaderTp;
 use Src\Shared\Tp\FooterTp;
+use Src\User\Dashboard\DashboardContrClass;
 
 global $openerTp;
 $openerTp = new OpenerTp();
-$openerTp->startSession();
 $openerTp->setUrlReturn(2);
 $urlTitle = 'Dashboard';
 
 // Redurect user if not loged in
-if (!isset($_SESSION['uid'])) {
+if ($openerTp->startSession()) {
 	header('location: '. $openerTp->getUrlReturn() .'Login');
 }
+
+$dashContr = new DashboardContrClass();
 
  ?>
 
@@ -28,7 +30,9 @@ if (!isset($_SESSION['uid'])) {
  	<?php $headerTp = new HeaderTp();
 	$headerTp->echoHeader($openerTp->getUrlReturn(), $urlTitle) ?>
 
-	<!--start--><p>Dashboard</p>
+	<h1>Dashboard</h1>
+
+	<?php $dashContr->createLegoListSec(); ?>
 
 	<?php $footerTp = new FooterTp();
 	$footerTp->echoFooter($openerTp->getUrlReturn()); ?>

@@ -4,17 +4,28 @@ declare(strict_types = 1);
 namespace Src\Shared\Tp;
 require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
 
+use Src\Shared\Classes\SessionValidatorClass;
 use Src\Shared\Exceptions\UndefinedVariableException;
 
-class OpenerTp
+class OpenerTp extends SessionValidatorClass
 {
 	private $urlReturn;
 	private $isSet = false;
 
-	public function startSession(): void
+	public function startSession(): bool
 	{
 		if (session_status() === PHP_SESSION_NONE) {
 			session_start();
+		}
+		
+		if ($this->validate()) {
+			return false;
+		}
+		else {
+			session_unset();
+			session_destroy();
+			session_start();
+			return true;
 		}
 	}
 

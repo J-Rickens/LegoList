@@ -66,14 +66,11 @@ class LoginClass {
 
 			$user = $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
 
-			if (session_status() === PHP_SESSION_NONE) {
-				session_start();
-			}
-			else {
+			if (session_status() === PHP_SESSION_ACTIVE) {
 				session_unset();
 				session_destroy();
-				session_start();
 			}
+			session_start();
 			$_SESSION['uid'] = $user[0]['user_id'];
 			$_SESSION['username'] = $user[0]['username'];
 			$_SESSION['name'] = $user[0]['name'];

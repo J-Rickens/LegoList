@@ -1,2 +1,3 @@
 old/
 .phpunit.result.cache
+src/.Shared/Classes/DbhLoginClass.php
