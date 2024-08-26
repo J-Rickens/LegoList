@@ -25,11 +25,11 @@ class RegisterClass {
 	public function setUser(array $userVals): void {
 		//global $openerTp;
 
-		$this->dbh->prepStmt('INSERT INTO users (username, email, name, password) VALUES (?, ?, ?, ?);');
+		$this->dbh->prepStmt('CALL insert_into_user_tables (?, ?, ?, ?);');
 
 		$hashedPwd = password_hash($userVals['pwd'], PASSWORD_DEFAULT);
 
-		if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['email'], $userVals['name'], $hashedPwd))) {
+		if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['email'], $hashedPwd, $userVals['name']))) {
 			$this->dbh->setStmtNull();
 			throw new StmtFailedException('setstmtfailed');
 			//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=setstmtfailed');
@@ -40,7 +40,7 @@ class RegisterClass {
 	public function checkUserExist($usna, $email): bool {
 		//global $openerTp;
 
-		$this->dbh->prepStmt('SELECT username FROM users WHERE username = ? OR email = ?;');
+		$this->dbh->prepStmt('SELECT user_id FROM users WHERE username = ? OR email = ?;');
 
 		if (!$this->dbh->execStmt(array($usna, $email))) {
 			$this->dbh->setStmtNull();

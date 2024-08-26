@@ -20,15 +20,15 @@ class ListEditorViewClass {
 				<input type="text" name="listName" placeholder="List Name"
 					pattern="<?php echo LegoListRegex::NAME; ?>" title="<?php echo LegoListRegex::NAMEDESCR; ?>"
 					value="<?php echo $legoListVals['listName']; ?>" required>
-				<input type="radio" name="pubPri" id="public" value="public"
-				<?php if ($legoListVals['pubPri']==1) {echo 'checked';}?>>
+				<input type="radio" name="isPublic" id="public" value="public"
+				<?php if ($legoListVals['isPublic']==1) {echo 'checked';}?>>
 				<label for="public">Public</label>
-				<input type="radio" name="pubPri" id="private" value="private"
-				<?php if ($legoListVals['pubPri']==0) {echo 'checked';}?>>
+				<input type="radio" name="isPublic" id="private" value="private"
+				<?php if ($legoListVals['isPublic']==0) {echo 'checked';}?>>
 				<label for="private">Private</label>
-				<?php //echo 'Error: pubPri not defined'; ?>
-				<input type="hidden" name="list_id"
-					value="<?php echo $_SESSION['list_id']; ?>">
+				<?php //echo 'Error: isPublic not defined'; ?>
+				<input type="hidden" name="listId"
+					value="<?php echo $_SESSION['listId']; ?>">
 				<input type="hidden" name="postType"
 					value="listData">
 
@@ -49,11 +49,11 @@ class ListEditorViewClass {
 			<p>Update Your List of Lego Sets Here!</p>
 			<form action="<?php echo 'index.php'; ?>" method="post">
 				<?php // inputs for required feilds: lego_id, list_id ?>
-				<input type="text" name="legoID" placeholder="Lego ID #" 
+				<input type="text" name="legoId" placeholder="Lego ID #" 
 					pattern="<?php echo LegoRegex::LEGOID; ?>" title="<?php echo LegoRegex::LEGOIDDESCR; ?>"
 					value="<?php echo $legoId; ?>" required>
-				<input type="hidden" name="list_id"
-					value="<?php echo $_SESSION['list_id']; ?>">
+				<input type="hidden" name="listId"
+					value="<?php echo $_SESSION['listId']; ?>">
 				<input type="hidden" name="postType"
 					value="addLego">
 
@@ -78,10 +78,10 @@ class ListEditorViewClass {
 					<?php foreach ($legoListLegos as $lego): ?>
 						<li><?php var_dump($lego); ?>
 							<form action="<?php echo 'index.php'; ?>" method="post">
-								<input type="hidden" name="legoID"
+								<input type="hidden" name="legoId"
 									value="<?php echo $lego['lego_id']; ?>">
-								<input type="hidden" name="list_id"
-									value="<?php echo $_SESSION['list_id']; ?>">
+								<input type="hidden" name="listId"
+									value="<?php echo $_SESSION['listId']; ?>">
 								<input type="hidden" name="postType"
 									value="removeLego">
 								<button type="submit" name="submit">REMOVE LEGO</button>

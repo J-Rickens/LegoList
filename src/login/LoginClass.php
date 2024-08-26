@@ -25,7 +25,7 @@ class LoginClass {
 	public function getUser(array $userVals): void {
 		//global $openerTp;
 		
-		$this->dbh->prepStmt('SELECT password FROM users WHERE username = ? OR email = ?;');
+		$this->dbh->prepStmt('SELECT pwd FROM users WHERE username = ? OR email = ?;');
 
 		if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['usna']))) {
 			$this->dbh->setStmtNull();
@@ -41,7 +41,7 @@ class LoginClass {
 		}
 
 		$hashedPwds = $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
-		$checkPwd = password_verify($userVals['pwd'], $hashedPwds[0]['password']);
+		$checkPwd = password_verify($userVals['pwd'], $hashedPwds[0]['pwd']);
 		if ($checkPwd == false) {
 			$this->dbh->setStmtNull();
 			throw new StmtFailedException('wrongpassword');
@@ -49,9 +49,13 @@ class LoginClass {
 			//exit();
 		}
 		elseif ($checkPwd == true) {
-			$this->dbh->prepStmt('SELECT * FROM users WHERE username = ? OR email = ? AND password = ?;');
+			$stmt = 'SELECT users.*, user_data.name, user_data.date_created
+				FROM users
+				LEFT JOIN user_data ON user_data.user_id = users.user_id
+				WHERE (users.username = ? OR users.email = ?) AND users.pwd = ?;';
+			$this->dbh->prepStmt($stmt);
 
-			if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['usna'], $hashedPwds[0]['password']))) {
+			if (!$this->dbh->execStmt(array($userVals['usna'], $userVals['usna'], $hashedPwds[0]['pwd']))) {
 				$this->dbh->setStmtNull();
 				throw new StmtFailedException('getstmtfailed2');
 				//header('location: ' . $openerTp->getUrlReturn() . 'Login/index.php?error=getstmtfailed');
@@ -72,9 +76,9 @@ class LoginClass {
 			}
 			session_start();
 			$_SESSION['uid'] = $user[0]['user_id'];
-			$_SESSION['username'] = $user[0]['username'];
+			$_SESSION['usna'] = $user[0]['username'];
 			$_SESSION['name'] = $user[0]['name'];
-			$_SESSION['userdate'] = $user[0]['date_created'];
+			$_SESSION['dateCreated'] = $user[0]['date_created'];
 		}
 
 		$this->dbh->setStmtNull();

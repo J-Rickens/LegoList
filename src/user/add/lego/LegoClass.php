@@ -26,7 +26,7 @@ class LegoClass {
 		//global $openerTp;
 		
 		// check if any of the values are not null and add to statment
-		$opColNames = array('name'=>$legoVals['legoName'], 'collection'=>$legoVals['collection'], 'cost'=>$legoVals['cost']);
+		$opColNames = array('lego_name'=>$legoVals['legoName'], 'lego_collection'=>$legoVals['collection'], 'lego_cost'=>$legoVals['cost']);
 		$stmtP1 = 'INSERT INTO legos (lego_id, piece_count';
 		$stmtP2 = ') VALUES (?, ?';
 		$stmtInputs = array($legoVals['legoID'], $legoVals['pieceCount']);

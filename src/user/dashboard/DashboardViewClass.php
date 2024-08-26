@@ -14,8 +14,8 @@ class DashboardViewClass {
 			<h3>Your LegoLists:</h3>
 			<ul>
 				<?php foreach ($legoLists as $legoList): ?>
-					<li><a href="<?php echo '../ListEditor/index.php?list_id=' . $legoList['list_id']; ?>">
-						(<?php if ($legoList['public']==1) {
+					<li><a href="<?php echo '../ListEditor/index.php?listid=' . $legoList['list_id']; ?>">
+						(<?php if ($legoList['is_public']==1) {
 							echo 'Public';
 						} else {
 							echo 'Private';

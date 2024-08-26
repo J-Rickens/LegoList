@@ -23,7 +23,7 @@ class DashboardClass {
 	}
 
 	public function getLegoLists($uid): array {
-		$this->dbh->prepStmt('SELECT * FROM user_lists WHERE owner_id = ?;');
+		$this->dbh->prepStmt('SELECT * FROM legolists WHERE owner_id = ?;');
 
 		if (!$this->dbh->execStmt(array($uid))) {
 			$this->dbh->setStmtNull();

@@ -22,10 +22,10 @@ class ListEditorClass {
 		}
 	}
 
-	public function checkLegoList($list_id, $uid): array {
-		$this->dbh->prepStmt('SELECT owner_id FROM user_lists WHERE list_id = ?;');
+	public function checkLegoList($listId, $uid): array {
+		$this->dbh->prepStmt('SELECT owner_id FROM legolists WHERE list_id = ?;');
 
-		if (!$this->dbh->execStmt(array($list_id))) {
+		if (!$this->dbh->execStmt(array($listId))) {
 			$this->dbh->setStmtNull();
 			throw new StmtFailedException('checkstmtfailed');
 		}
@@ -35,19 +35,19 @@ class ListEditorClass {
 			return [false, 'listnotfound'];
 		}
 
-		$owner_id = $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
+		$ownerIds = $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
 		$this->dbh->setStmtNull();
-		if ($owner_id[0]['owner_id'] != $uid) {
+		if ($ownerIds[0]['owner_id'] != $uid) {
 			return [false, 'listpermissionfail'];
 		}
 
 		return [true, null];
 	}
 
-	public function getLegoListData($list_id): array {
-		$this->dbh->prepStmt('SELECT * FROM user_lists WHERE list_id = ?;');
+	public function getLegoListData($listId): array {
+		$this->dbh->prepStmt('SELECT * FROM legolists WHERE list_id = ?;');
 
-		if (!$this->dbh->execStmt(array($list_id))) {
+		if (!$this->dbh->execStmt(array($listId))) {
 			$this->dbh->setStmtNull();
 			throw new StmtFailedException('getdatastmtfailed');
 		}
@@ -60,10 +60,10 @@ class ListEditorClass {
 		return $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
-	public function getLegoListLegos($list_id): array {
-		$this->dbh->prepStmt('SELECT lego_id FROM lego_list_c WHERE list_id = ?;');
+	public function getLegoListLegos($listId): array {
+		$this->dbh->prepStmt('SELECT lego_id FROM legolist_lego_c WHERE list_id = ?;');
 
-		if (!$this->dbh->execStmt(array($list_id))) {
+		if (!$this->dbh->execStmt(array($listId))) {
 			$this->dbh->setStmtNull();
 			throw new StmtFailedException('getlegosstmtfailed');
 		}
@@ -77,18 +77,18 @@ class ListEditorClass {
 	}
 
 	public function setLegoToList(array $addLegoVals): void {
-		$stmt = $this->dbh->prepStmt('INSERT INTO lego_list_c (list_id, lego_id) VALUES (?, ?);');
+		$stmt = $this->dbh->prepStmt('INSERT INTO legolist_lego_c (list_id, lego_id) VALUES (?, ?);');
 		
-		if (!$this->dbh->execStmt(array($addLegoVals['list_id'], $addLegoVals['legoId']))) {
+		if (!$this->dbh->execStmt(array($addLegoVals['listId'], $addLegoVals['legoId']))) {
 			$this->dbh->setStmtNull();
 			throw new StmtFailedException('setstmtfailed');
 		}
 	}
 
 	public function deleteLegoFromList(array $removeLegoVals): void {
-		$stmt = $this->dbh->prepStmt('DELETE FROM lego_list_c WHERE list_id = ? AND lego_id = ?;');
+		$stmt = $this->dbh->prepStmt('DELETE FROM legolist_lego_c WHERE list_id = ? AND lego_id = ?;');
 		
-		if (!$this->dbh->execStmt(array($removeLegoVals['list_id'], $removeLegoVals['legoId']))) {
+		if (!$this->dbh->execStmt(array($removeLegoVals['listId'], $removeLegoVals['legoId']))) {
 			$this->dbh->setStmtNull();
 			throw new StmtFailedException('setstmtfailed');
 		}

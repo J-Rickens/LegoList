@@ -15,9 +15,9 @@ class ListEditorContrClass {
 	private $listEditorViewClass;
 	private ?string $eMessage = null;
 	private array $legoListVals = array(
-		'list_id'=>null,
+		'listId'=>null,
 		'listName'=>null,
-		'pubPri'=>null,
+		'isPublic'=>null,
 		'uid'=>null,
 		'dateCreated'=>null,
 		'dateModified'=>null
@@ -50,8 +50,8 @@ class ListEditorContrClass {
 
 
 	// initialization methods
-	public function checkListId($list_id): bool {
-		$checkResults = $this->listEditorClass->checkLegoList($list_id, $_SESSION['uid']);
+	public function checkListId($listId): bool {
+		$checkResults = $this->listEditorClass->checkLegoList($listId, $_SESSION['uid']);
 		$this->eMessage = $checkResults[1];
 		return $checkResults[0];
 	}
@@ -61,16 +61,16 @@ class ListEditorContrClass {
 	}
 
 	public function getListData(): void {
-		$listData = $this->listEditorClass->getLegoListData($_SESSION['list_id']);
+		$listData = $this->listEditorClass->getLegoListData($_SESSION['listId']);
 
-		$this->legoListVals['list_id'] = $listData[0]['list_id'];
+		$this->legoListVals['listId'] = $listData[0]['list_id'];
 		$this->legoListVals['listName'] = $listData[0]['list_name'];
-		$this->legoListVals['pubPri'] = $listData[0]['public'];
+		$this->legoListVals['isPublic'] = $listData[0]['is_public'];
 		$this->legoListVals['uid'] = $listData[0]['owner_id'];
 		$this->legoListVals['dateCreated'] = $listData[0]['date_created'];
 		$this->legoListVals['dateModified'] = $listData[0]['date_modified'];
 
-		$this->legoListLegos = $this->listEditorClass->getLegoListLegos($_SESSION['list_id']);
+		$this->legoListLegos = $this->listEditorClass->getLegoListLegos($_SESSION['listId']);
 	}
 
 
