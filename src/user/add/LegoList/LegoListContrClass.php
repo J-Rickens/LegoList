@@ -13,7 +13,7 @@ class LegoListContrClass {
 	private $legoListClass;
 	private $legoListVals = array(
 		'listName'=>null,
-		'pubPri'=>null,
+		'isPublic'=>null,
 		'uid'=>null
 	);
 
@@ -92,19 +92,19 @@ class LegoListContrClass {
 	}
 
 
-	// Reformats pubPri as true/false
+	// Reformats isPublic as true/false
 	private function formatPubPri(): void {
-		if ($this->legoListVals['pubPri'] == 'public') {
-			$this->legoListVals['pubPri'] = true;
+		if ($this->legoListVals['isPublic'] == 'public') {
+			$this->legoListVals['isPublic'] = true;
 		}
 		else {
-			$this->legoListVals['pubPri'] = false;
+			$this->legoListVals['isPublic'] = false;
 		}
 	}
 
 	// Error Checks: empty, valid
 	private function ecEmptyInput(): bool {
-		if (empty($this->legoListVals['listName']) || empty($this->legoListVals['pubPri']) || empty($this->legoListVals['uid'])){
+		if (empty($this->legoListVals['listName']) || empty($this->legoListVals['isPublic']) || empty($this->legoListVals['uid'])){
 			return true;
 		}
 		return false;
@@ -118,7 +118,7 @@ class LegoListContrClass {
 	}
 
 	private function ecValidPubPri(): bool {
-		if ($this->legoListVals['pubPri'] == 'public' || $this->legoListVals['pubPri'] == 'private') {
+		if ($this->legoListVals['isPublic'] == 'public' || $this->legoListVals['isPublic'] == 'private') {
 			return true;
 		}
 		return false;

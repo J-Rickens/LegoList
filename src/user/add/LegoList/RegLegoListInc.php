@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 	// Grabbing data
 	$legoListVals = array(
 		'listName'=> htmlspecialchars($_POST['listName'], ENT_QUOTES, 'UTF-8'),
-		'pubPri'=> htmlspecialchars($_POST['pubPri'], ENT_QUOTES, 'UTF-8'),
+		'isPublic'=> htmlspecialchars($_POST['isPublic'], ENT_QUOTES, 'UTF-8'),
 		'uid'=> htmlspecialchars($_POST['uid'], ENT_QUOTES, 'UTF-8')
 	);
 

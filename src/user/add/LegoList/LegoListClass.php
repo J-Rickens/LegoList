@@ -22,12 +22,12 @@ class LegoListClass {
 		}
 	}
 
-	public function setLegoList(array $legoListVals): void {//$listName, $pubPri, $uid) {
+	public function setLegoList(array $legoListVals): void {//$listName, $isPublic, $uid) {
 		//global $openerTp;
 		
-		$stmt = $this->dbh->prepStmt('INSERT INTO user_lists (list_name, public, owner_id) VALUES (?, ?, ?);');
+		$stmt = $this->dbh->prepStmt('INSERT INTO legolists (list_name, is_public, owner_id) VALUES (?, ?, ?);');
 		
-		if (!$this->dbh->execStmt(array($legoListVals['listName'], $legoListVals['pubPri'], $legoListVals['uid']))) {
+		if (!$this->dbh->execStmt(array($legoListVals['listName'], $legoListVals['isPublic'], $legoListVals['uid']))) {
 			$this->dbh->setStmtNull();
 			throw new StmtFailedException('setstmtfailed');
 			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/LegoList/index.php?error=setstmtfailed');

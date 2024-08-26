@@ -38,7 +38,7 @@ class MockDbhClass
 		foreach ($this->tables as &$table) {
 			foreach ($table as &$row) {
 				foreach ($row as $key => $value) {
-					if ($key == 'password') {
+					if ($key == 'pwd') {
 						$row[$key] = password_hash($value, PASSWORD_DEFAULT);
 					}
 				}
@@ -48,7 +48,7 @@ class MockDbhClass
 
 	public function prepStmt(string $stmt): void
 	{
-		if(str_starts_with($stmt, 'SELECT') | str_starts_with($stmt, 'INSERT')) {
+		if(str_starts_with($stmt, 'SELECT') | str_starts_with($stmt, 'INSERT') | str_starts_with($stmt, 'CALL')) {
 			$this->stmtCount = substr_count($stmt, '?');
 			$this->stmtStatus = true;
 		}

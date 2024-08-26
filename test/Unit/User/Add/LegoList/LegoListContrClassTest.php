@@ -38,7 +38,7 @@ class LegoListContrClassTest extends TestCase
 	{
 		$legoList = new LegoListContrClass(array(
 			'listName'=>'not null',
-			'pubPri'=>'not null',
+			'isPublic'=>'not null',
 			'uid'=>'not null'
 		));
 
@@ -51,7 +51,7 @@ class LegoListContrClassTest extends TestCase
 	{
 		$this->legoListContr->setLegoListVals(array(
 			'listName'=>'something',
-			'pubPri'=>'something',
+			'isPublic'=>'something',
 			'uid'=>'something'
 		));
 
@@ -71,8 +71,8 @@ class LegoListContrClassTest extends TestCase
 	public static function addLegoListValidCases(): array
 	{
 		return [
-			[['listName'=>'123','pubPri'=>'public','uid'=>'1']],
-			[['listName'=>'123456789012345678901234567890abzABZ -12','pubPri'=>'private','uid'=>'11111111111']]
+			[['listName'=>'123','isPublic'=>'public','uid'=>'1']],
+			[['listName'=>'123456789012345678901234567890abzABZ -12','isPublic'=>'private','uid'=>'11111111111']]
 		];
 	}
 
@@ -91,22 +91,22 @@ class LegoListContrClassTest extends TestCase
 	public static function addLegoListInvalidCases(): array
 	{
 		return [
-			[['listName'=>null,'pubPri'=>null,'uid'=>null],'emptyinput'],
-			[['listName'=>'','pubPri'=>'public','uid'=>'1'],'emptyinput'],
-			[['listName'=>'123','pubPri'=>'public'],'emptyinput'],
+			[['listName'=>null,'isPublic'=>null,'uid'=>null],'emptyinput'],
+			[['listName'=>'','isPublic'=>'public','uid'=>'1'],'emptyinput'],
+			[['listName'=>'123','isPublic'=>'public'],'emptyinput'],
 
-			[['listName'=>'12','pubPri'=>'public','uid'=>'1'],'name'],
-			[['listName'=>'12345678901234567890123456789012345678901','pubPri'=>'public','uid'=>'1'],'name'],
-			[['listName'=>'123!@#$%^&*()_=+`~[{]}\\|;:<>,./?"\'','pubPri'=>'public','uid'=>'1'],'name'],
+			[['listName'=>'12','isPublic'=>'public','uid'=>'1'],'name'],
+			[['listName'=>'12345678901234567890123456789012345678901','isPublic'=>'public','uid'=>'1'],'name'],
+			[['listName'=>'123!@#$%^&*()_=+`~[{]}\\|;:<>,./?"\'','isPublic'=>'public','uid'=>'1'],'name'],
 
-			[['listName'=>'123','pubPri'=>'Public','uid'=>'1'],'pubpri'],
-			[['listName'=>'123','pubPri'=>'PUBLIC','uid'=>'1'],'pubpri'],
-			[['listName'=>'123','pubPri'=>'pubpri','uid'=>'1'],'pubpri'],
+			[['listName'=>'123','isPublic'=>'Public','uid'=>'1'],'pubpri'],
+			[['listName'=>'123','isPublic'=>'PUBLIC','uid'=>'1'],'pubpri'],
+			[['listName'=>'123','isPublic'=>'pubpri','uid'=>'1'],'pubpri'],
 
-			[['listName'=>'123','pubPri'=>'public','uid'=>'-1'],'uid'],
-			//[['listName'=>'123','pubPri'=>'public','uid'=>'0'],'uid'],
-			[['listName'=>'123','pubPri'=>'public','uid'=>'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'],'uid'],
-			[['listName'=>'123','pubPri'=>'public','uid'=>'!@#$%^&*()-_=+`~[{]}\\|;:",<.>/?\''],'uid'],
+			[['listName'=>'123','isPublic'=>'public','uid'=>'-1'],'uid'],
+			//[['listName'=>'123','isPublic'=>'public','uid'=>'0'],'uid'],
+			[['listName'=>'123','isPublic'=>'public','uid'=>'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'],'uid'],
+			[['listName'=>'123','isPublic'=>'public','uid'=>'!@#$%^&*()-_=+`~[{]}\\|;:",<.>/?\''],'uid'],
 		];
 	}
 }

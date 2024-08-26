@@ -31,7 +31,7 @@ class LegoListClassTest extends TestCase
 		$this->dbh->setTestingConditions([['stmtFail'=>true]]);
 		$this->expectException(StmtFailedException::class);
 		$this->expectExceptionMessage('setstmtfailed');
-		$this->legoList->setLegoList(['listName'=>null,'pubPri'=>null,'uid'=>null]);
+		$this->legoList->setLegoList(['listName'=>null,'isPublic'=>null,'uid'=>null]);
 	}
 
 	#[DataProvider('setLegoListValidCases')]
@@ -47,9 +47,9 @@ class LegoListClassTest extends TestCase
 	public static function setLegoListValidCases(): array
 	{
 		return [
-			[['listName'=>'1','pubPri'=>true,'uid'=>'1'],[[]]],
-			[['listName'=>'1','pubPri'=>False,'uid'=>'1'],[[]]],
-			[['listName'=>'Name 1','pubPri'=>true,'uid'=>'1'],[[]]]
+			[['listName'=>'1','isPublic'=>true,'uid'=>'1'],[[]]],
+			[['listName'=>'1','isPublic'=>False,'uid'=>'1'],[[]]],
+			[['listName'=>'Name 1','isPublic'=>true,'uid'=>'1'],[[]]]
 		];
 	}
 }

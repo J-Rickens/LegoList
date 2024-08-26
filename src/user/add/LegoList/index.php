@@ -37,9 +37,9 @@ if ($openerTp->startSession()) {
 				<input type="text" name="listName" placeholder="List Name"
 					pattern="<?php echo LegoListRegex::NAME; ?>" title="<?php echo LegoListRegex::NAMEDESCR; ?>"
 					required>
-				<input type="radio" name="pubPri" id="public" value="public" checked>
+				<input type="radio" name="isPublic" id="public" value="public" checked>
 				<label for="public">Public</label>
-				<input type="radio" name="pubPri" id="private" value="private">
+				<input type="radio" name="isPublic" id="private" value="private">
 				<label for="private">Private</label>
 				<input type="hidden" name="uid"
 					value="<?php echo $_SESSION['uid']; ?>">

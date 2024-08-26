@@ -24,13 +24,13 @@ if ($openerTp->startSession()) {
 $editor = new ListEditorContrClass();
 
 // check if list ID in _GET
-if (isset($_GET['list_id'])) {
+if (isset($_GET['listid'])) {
 	// check if ID is valid
 	// check if user has access
 	try {
-		if ($editor->checkListId($_GET['list_id'])) {
+		if ($editor->checkListId($_GET['listid'])) {
 			// set session variable and redirect to clean self
-			$_SESSION['list_id'] = $_GET['list_id'];
+			$_SESSION['listId'] = $_GET['listid'];
 			header('location: ' . $openerTp->getUrlReturn() . 'User/ListEditor');
 		}
 		else {
@@ -51,8 +51,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// Grabbing data
 		$legoListVals = array(
 			'listName'=> htmlspecialchars($_POST['listName'], ENT_QUOTES, 'UTF-8'),
-			'pubPri'=> htmlspecialchars($_POST['pubPri'], ENT_QUOTES, 'UTF-8'),
-			'list_id'=> htmlspecialchars($_POST['list_id'], ENT_QUOTES, 'UTF-8')
+			'isPublic'=> htmlspecialchars($_POST['isPublic'], ENT_QUOTES, 'UTF-8'),
+			'listId'=> htmlspecialchars($_POST['listId'], ENT_QUOTES, 'UTF-8')
 		);
 
 		// Running error handlers and updating list
@@ -69,8 +69,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	elseif (htmlspecialchars($_POST['postType'], ENT_QUOTES, 'UTF-8') == 'addLego') {
 		// Grabbing data
 		$addLegoVals = array(
-			'legoId'=> htmlspecialchars($_POST['legoID'], ENT_QUOTES, 'UTF-8'),
-			'list_id'=> htmlspecialchars($_POST['list_id'], ENT_QUOTES, 'UTF-8')
+			'legoId'=> htmlspecialchars($_POST['legoId'], ENT_QUOTES, 'UTF-8'),
+			'listId'=> htmlspecialchars($_POST['listId'], ENT_QUOTES, 'UTF-8')
 		);
 
 		// Running error handlers and updating list
@@ -87,8 +87,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	elseif (htmlspecialchars($_POST['postType'], ENT_QUOTES, 'UTF-8') == 'removeLego') {
 		// Grabbing data
 		$removeLegoVals = array(
-			'legoId'=> htmlspecialchars($_POST['legoID'], ENT_QUOTES, 'UTF-8'),
-			'list_id'=> htmlspecialchars($_POST['list_id'], ENT_QUOTES, 'UTF-8')
+			'legoId'=> htmlspecialchars($_POST['legoId'], ENT_QUOTES, 'UTF-8'),
+			'listId'=> htmlspecialchars($_POST['listId'], ENT_QUOTES, 'UTF-8')
 		);
 
 		// Running error handlers and updating list
@@ -110,7 +110,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 // else na
 
 // check if session variable is set
-if (isset($_SESSION['list_id'])) {
+if (isset($_SESSION['listId'])) {
 	// pull data
 	try {
 		$editor->getListData();
@@ -142,8 +142,8 @@ else {
 	<br>
 
 
-	<?php if (isset($_GET['legoId'])) {
-		$editor->viewAddLegoToListForm($_GET['legoId']);
+	<?php if (isset($_GET['legoid'])) {
+		$editor->viewAddLegoToListForm($_GET['legoid']);
 	}
 	else {
 		$editor->viewAddLegoToListForm();

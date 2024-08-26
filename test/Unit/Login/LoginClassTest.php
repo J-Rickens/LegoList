@@ -33,7 +33,7 @@ class LoginClassTest extends TestCase
 		array $rows
 	): void
 	{
-		$keyNames = ['user_id'=>'uid','username'=>'username','name'=>'name','date_created'=>'userdate'];
+		$keyNames = ['user_id'=>'uid','username'=>'usna','name'=>'name','date_created'=>'dateCreated'];
 		$this->dbh->setTestingConditions($testCode, $rows);
 		$this->login->getUser($userVals);
 		foreach ($rows[1][0] as $key => $value) {
@@ -44,10 +44,10 @@ class LoginClassTest extends TestCase
 	{
 		return [
 			array(['usna'=>'user','pwd'=>'1'],[['fetch'=>true, 'exists'=>true],['fetch'=>true, 'exists'=>true]],[
-				[['password'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
+				[['pwd'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
 			]),
 			array(['usna'=>'user','pwd'=>'1234567890asdf'],[['fetch'=>true, 'exists'=>true],['fetch'=>true, 'exists'=>true]],[
-				[['password'=>'1234567890asdf']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
+				[['pwd'=>'1234567890asdf']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
 			])
 		];
 	}
@@ -69,23 +69,23 @@ class LoginClassTest extends TestCase
 	{
 		return [
 			array(['usna'=>'user','pwd'=>'1'],[['stmtFail'=>true, 'fetch'=>true, 'exists'=>true],['stmtFail'=>false, 'fetch'=>true, 'exists'=>true]],'getstmtfailed1',[
-				[['password'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
+				[['pwd'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
 			]),
 
 			array(['usna'=>'user','pwd'=>'1'],[['stmtFail'=>false, 'fetch'=>true, 'exists'=>false],['stmtFail'=>false, 'fetch'=>true, 'exists'=>true]],'usernotfound1',[
-				[['password'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
+				[['pwd'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
 			]),
 
 			array(['usna'=>'user','pwd'=>'12'],[['stmtFail'=>false, 'fetch'=>true, 'exists'=>true],['stmtFail'=>false, 'fetch'=>true, 'exists'=>true]],'wrongpassword',[
-				[['password'=>'1234']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
+				[['pwd'=>'1234']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
 			]),
 
 			array(['usna'=>'user','pwd'=>'1'],[['stmtFail'=>false, 'fetch'=>true, 'exists'=>true],['stmtFail'=>true, 'fetch'=>true, 'exists'=>true]],'getstmtfailed2',[
-				[['password'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
+				[['pwd'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
 			]),
 
 			array(['usna'=>'user','pwd'=>'1'],[['stmtFail'=>false, 'fetch'=>true, 'exists'=>true],['stmtFail'=>false, 'fetch'=>true, 'exists'=>false]],'usernotfound2',[
-				[['password'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
+				[['pwd'=>'1']],[['user_id'=>'1','username'=>'user','name'=>'use','date_created'=>'1/1/01']]
 			])
 		];
 	}
