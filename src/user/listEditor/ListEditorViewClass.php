@@ -27,6 +27,8 @@ class ListEditorViewClass {
 				<?php if ($legoListVals['isPublic']==0) {echo 'checked';}?>>
 				<label for="private">Private</label>
 				<?php //echo 'Error: isPublic not defined'; ?>
+				<input type="hidden" name="uid"
+					value="<?php echo $_SESSION['uid']; ?>">
 				<input type="hidden" name="listId"
 					value="<?php echo $_SESSION['listId']; ?>">
 				<input type="hidden" name="postType"

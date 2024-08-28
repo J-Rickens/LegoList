@@ -20,7 +20,7 @@ CREATE TABLE legolists (
     list_name varchar(255) NOT NULL DEFAULT 'Wishlist',
     is_public boolean NOT NULL DEFAULT 1,
     date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    date_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (list_id),
     FOREIGN KEY (owner_id) REFERENCES users(user_id)
 ) ENGINE = InnoDB;

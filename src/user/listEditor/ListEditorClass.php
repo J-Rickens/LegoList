@@ -76,6 +76,15 @@ class ListEditorClass {
 		return $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
+	public function updateLegoListData(array $legoListVals): void {
+		$stmt = $this->dbh->prepStmt('UPDATE legolists SET list_name = ?, is_public = ?, owner_id = ? WHERE list_id = ?;');
+
+		if (!$this->dbh->execStmt(array($legoListVals['listName'], $legoListVals['isPublic'], $legoListVals['uid'], $legoListVals['listId']))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('updatestmtfailed');
+		}
+	}
+
 	public function setLegoToList(array $addLegoVals): void {
 		$stmt = $this->dbh->prepStmt('INSERT INTO legolist_lego_c (list_id, lego_id) VALUES (?, ?);');
 		

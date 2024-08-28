@@ -4,12 +4,13 @@ declare(strict_types = 1);
 namespace Src\User\ListEditor;
 require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
 
-use Src\Shared\Exceptions\StmtFailedException;
+use Src\Shared\Exceptions\InvalidInputException;
 use Src\User\Add\Lego\LegoClass;
+use Src\User\Add\LegoList\LegoListContrClass;
 use Src\User\ListEditor\ListEditorClass;
 use Src\User\ListEditor\ListEditorViewClass;
 
-class ListEditorContrClass {
+class ListEditorContrClass extends LegoListContrClass {
 
 	private $listEditorClass;
 	private $listEditorViewClass;
@@ -47,6 +48,27 @@ class ListEditorContrClass {
 		}
 	}
 
+	public function setLegoListVals(array $legoListVals): void
+	{
+		foreach ($legoListVals as $key => $value) {
+			$this->legoListVals[$key] = $value;
+		}
+	}
+
+	public function getLegoListVals(bool $getFull = true, array $valNames = array()): array
+	{
+		if ($getFull) {
+			return $this->legoListVals;
+		}
+		else {
+			$returnArray = array();
+			foreach ($valNames as $key) {
+				$returnArray[$key] = $this->legoListVals[$key];
+			}
+			return $returnArray;
+		}
+	}
+
 
 
 	// initialization methods
@@ -77,7 +99,21 @@ class ListEditorContrClass {
 
 	// post data manipulater methods
 	public function updateLegoList(array $legoListVals): void {
+		parent::setLegoListVals(array(
+			'listName'=>$legoListVals['listName'],
+			'isPublic'=>$legoListVals['isPublic'],
+			'uid'=>$legoListVals['uid']
+		));
+		parent::legoListErrorChecks();
+		$validLegoListVals = parent::getLegoListVals();
 
+		if (!$this->ecValidListId($legoListVals['listId'])) {
+			// echo 'Invalid ListId';
+			throw new InvalidInputException('listid');
+		}
+		$validLegoListVals['listId'] = $legoListVals['listId'];
+
+		$this->listEditorClass->updateLegoListData($validLegoListVals);
 	}
 
 	public function addLegoToLegoList(array $addLegoVals): void {
@@ -89,7 +125,12 @@ class ListEditorContrClass {
 	}
 
 	// post data validation methods
-
+	private function ecValidListId($listId): bool {
+		if (preg_match('/^\d+$/', $listId)) {
+			return true;
+		}
+		return false;
+	}
 
 
 	// view methods
