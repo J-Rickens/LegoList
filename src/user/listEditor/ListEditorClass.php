@@ -44,6 +44,21 @@ class ListEditorClass {
 		return [true, null];
 	}
 
+	public function checkLegoInLegoList($listId, $legoId): bool {
+		$this->dbh->prepStmt('SELECT * FROM legolist_lego_c WHERE list_id = ? AND lego_id = ?;');
+
+		if (!$this->dbh->execStmt(array($listId, $legoId))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('checkstmtfailed');
+		}
+
+		if ($this->dbh->getStmt()->rowCount() == 0) {
+			$this->dbh->setStmtNull();
+			return false;
+		}
+		return true;
+	}
+
 	public function getLegoListData($listId): array {
 		$this->dbh->prepStmt('SELECT * FROM legolists WHERE list_id = ?;');
 

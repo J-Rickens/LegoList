@@ -143,12 +143,7 @@ else {
 	<br>
 
 
-	<?php if (isset($_GET['legoid'])) {
-		$editor->viewAddLegoToListForm($_GET['legoid']);
-	}
-	else {
-		$editor->viewAddLegoToListForm();
-	} ?>
+	<?php $editor->viewAddLegoToListForm(); ?>
 	<br>
 
 

@@ -43,7 +43,11 @@ class ListEditorViewClass {
 		<?php
 	}
 
-	public function echoAddLegoToListForm($legoId): void {
+	public function echoAddLegoToListForm(): void {
+		$legoId = null;
+		if (isset($_GET['legoid'])) {
+			$legoId = $_GET['legoid'];
+		}
 		?>
 		<section>
 		<div>

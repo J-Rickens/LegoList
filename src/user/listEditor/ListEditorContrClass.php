@@ -10,10 +10,13 @@ use Src\User\Add\LegoList\LegoListContrClass;
 use Src\User\ListEditor\ListEditorClass;
 use Src\User\ListEditor\ListEditorViewClass;
 
-class ListEditorContrClass extends LegoListContrClass {
+class ListEditorContrClass {
 
 	private $listEditorClass;
 	private $listEditorViewClass;
+	private $legoClass;
+	private $legoListContrClass;
+
 	private ?string $eMessage = null;
 	private array $legoListVals = array(
 		'listId'=>null,
@@ -25,12 +28,19 @@ class ListEditorContrClass extends LegoListContrClass {
 	);
 	private array $legoListLegos = array();
 
-	public function __construct($legoClass = null, $listEditorClass = null, $listEditorViewClass = null) {
+	public function __construct($legoClass = null, $legoListContrClass = null, $listEditorClass = null, $listEditorViewClass = null) {
 		if (is_null($legoClass)) {
 			$this->legoClass = new LegoClass();
 		}
 		else {
 			$this->legoClass = $legoClass;
+		}
+
+		if (is_null($legoListContrClass)) {
+			$this->legoListContrClass = new LegoListContrClass();
+		}
+		else {
+			$this->legoListContrClass = $legoListContrClass;
 		}
 
 		if (is_null($listEditorClass)) {
@@ -99,38 +109,75 @@ class ListEditorContrClass extends LegoListContrClass {
 
 	// post data manipulater methods
 	public function updateLegoList(array $legoListVals): void {
-		parent::setLegoListVals(array(
+		// run error checks
+		// check if listId is valid and if current user has permision to edit
+		if (!$this->checkListId($legoListVals['listId'])) {
+			// echo 'Invalid ListId';
+			throw new InvalidInputException('listid: ' . $this->getEMessage());
+		}
+
+		// use existing checks in LegoListContrClass to validate remaining data
+		$this->legoListContrClass->setLegoListVals(array(
 			'listName'=>$legoListVals['listName'],
 			'isPublic'=>$legoListVals['isPublic'],
 			'uid'=>$legoListVals['uid']
 		));
-		parent::legoListErrorChecks();
-		$validLegoListVals = parent::getLegoListVals();
+		$this->legoListContrClass->legoListErrorChecks();
 
-		if (!$this->ecValidListId($legoListVals['listId'])) {
-			// echo 'Invalid ListId';
-			throw new InvalidInputException('listid');
-		}
+		// create new array with reformated data
+		$validLegoListVals = $this->legoListContrClass->getLegoListVals();
 		$validLegoListVals['listId'] = $legoListVals['listId'];
 
+		// update the list
 		$this->listEditorClass->updateLegoListData($validLegoListVals);
 	}
 
 	public function addLegoToLegoList(array $addLegoVals): void {
+		// run error checks
+		// check if listId is valid and if current user has permision to edit
+		if (!$this->checkListId($addLegoVals['listId'])) {
+			// echo 'Invalid ListId';
+			throw new InvalidInputException('listid: ' . $this->getEMessage());
+		}
+
+		// check if lego exists
+		if (!$this->legoClass->checkLegoExist($addLegoVals['legoId'])) {
+			// echo 'Lego does not Exists';
+			throw new InvalidInputException('legonotexists');
+		}
+
+		// check if lego is not in list
+		if ($this->listEditorClass->checkLegoInLegoList($addLegoVals['listId'], $addLegoVals['legoId'])) {
+			// echo 'Lego already in list';
+			throw new InvalidInputException('legoinlist');
+		}
+
 		$this->listEditorClass->setLegoToList($addLegoVals);
 	}
 
 	public function removeLegoFromLegoList(array $removeLegoVals): void {
+		// run error checks
+		// check if listId is valid and if current user has permision to edit
+		if (!$this->checkListId($removeLegoVals['listId'])) {
+			// echo 'Invalid ListId';
+			throw new InvalidInputException('listid: ' . $this->getEMessage());
+		}
+
+		// check if lego exists
+		if (!$this->legoClass->checkLegoExist($removeLegoVals['legoId'])) {
+			// echo 'Lego does not Exists';
+			throw new InvalidInputException('legonotexists');
+		}
+
+		// check if lego is in list
+		if (!$this->listEditorClass->checkLegoInLegoList($removeLegoVals['listId'], $removeLegoVals['legoId'])) {
+			// echo 'Lego not in list';
+			throw new InvalidInputException('legonotinlist');
+		}
+
 		$this->listEditorClass->deleteLegoFromList($removeLegoVals);
 	}
 
-	// post data validation methods
-	private function ecValidListId($listId): bool {
-		if (preg_match('/^\d+$/', $listId)) {
-			return true;
-		}
-		return false;
-	}
 
 
 	// view methods
@@ -138,8 +185,8 @@ class ListEditorContrClass extends LegoListContrClass {
 		$this->listEditorViewClass->echoListDataForm($this->legoListVals);
 	}
 
-	public function viewAddLegoToListForm($legoId = null): void {
-		$this->listEditorViewClass->echoAddLegoToListForm($legoId);
+	public function viewAddLegoToListForm(): void {
+		$this->listEditorViewClass->echoAddLegoToListForm();
 	}
 
 	public function viewLegosInList(): void {
