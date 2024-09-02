@@ -1,4 +1,4 @@
-# ws_lego_php
+# LegoList
 Website for organizing Lego set data. php and ws practice
 
 will need to make the DbhLoginClass.php in src/.Shared/Classes folder
