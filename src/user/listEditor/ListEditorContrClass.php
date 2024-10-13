@@ -5,17 +5,18 @@ namespace Src\User\ListEditor;
 require __DIR__ . '\\..\\..\\..\\vendor\\autoload.php';
 
 use Src\Shared\Exceptions\InvalidInputException;
-use Src\User\Add\Lego\LegoClass;
-use Src\User\Add\LegoList\LegoListContrClass;
 use Src\User\ListEditor\ListEditorClass;
 use Src\User\ListEditor\ListEditorViewClass;
+use Src\User\Add\Lego\LegoClass;
+use Src\User\Add\LegoList\LegoListContrClass;
+use Src\Shared\Classes\LegoClass as LegoClassS;
 
-class ListEditorContrClass {
+class ListEditorContrClass extends LegoListContrClass {
 
 	private $listEditorClass;
 	private $listEditorViewClass;
 	private $legoClass;
-	private $legoListContrClass;
+	private $legoClassS;
 
 	private ?string $eMessage = null;
 	private array $legoListVals = array(
@@ -28,7 +29,7 @@ class ListEditorContrClass {
 	);
 	private array $legoListLegos = array();
 
-	public function __construct($legoClass = null, $legoListContrClass = null, $listEditorClass = null, $listEditorViewClass = null) {
+	public function __construct($legoClass = null, $legoClassS = null, $listEditorClass = null, $listEditorViewClass = null) {
 		if (is_null($legoClass)) {
 			$this->legoClass = new LegoClass();
 		}
@@ -36,11 +37,11 @@ class ListEditorContrClass {
 			$this->legoClass = $legoClass;
 		}
 
-		if (is_null($legoListContrClass)) {
-			$this->legoListContrClass = new LegoListContrClass();
+		if (is_null($legoClassS)) {
+			$this->legoClassS = new LegoClassS();
 		}
 		else {
-			$this->legoListContrClass = $legoListContrClass;
+			$this->legoClassS = $legoClassS;
 		}
 
 		if (is_null($listEditorClass)) {
@@ -50,7 +51,7 @@ class ListEditorContrClass {
 			$this->listEditorClass = $listEditorClass;
 		}
 
-		if (is_null($listEditorClass)) {
+		if (is_null($listEditorViewClass)) {
 			$this->listEditorViewClass = new ListEditorViewClass();
 		}
 		else {
@@ -79,6 +80,11 @@ class ListEditorContrClass {
 		}
 	}
 
+	public function getLegoListLegos(): array
+	{
+		return $this->legoListLegos;
+	}
+
 
 
 	// initialization methods
@@ -88,7 +94,7 @@ class ListEditorContrClass {
 		return $checkResults[0];
 	}
 
-	public function getEMessage(): string {
+	public function getEMessage(): ?string {
 		return $this->eMessage;
 	}
 
@@ -116,16 +122,8 @@ class ListEditorContrClass {
 			throw new InvalidInputException('listid: ' . $this->getEMessage());
 		}
 
-		// use existing checks in LegoListContrClass to validate remaining data
-		$this->legoListContrClass->setLegoListVals(array(
-			'listName'=>$legoListVals['listName'],
-			'isPublic'=>$legoListVals['isPublic'],
-			'uid'=>$legoListVals['uid']
-		));
-		$this->legoListContrClass->legoListErrorChecks();
-
 		// create new array with reformated data
-		$validLegoListVals = $this->legoListContrClass->getLegoListVals();
+		$validLegoListVals = $this->parentChecks($legoListVals);
 		$validLegoListVals['listId'] = $legoListVals['listId'];
 
 		// update the list
@@ -178,6 +176,20 @@ class ListEditorContrClass {
 		$this->listEditorClass->deleteLegoFromList($removeLegoVals);
 	}
 
+	// check methods
+	protected function parentChecks(array $legoListVals): array
+	{
+		// use existing checks in LegoListContrClass to validate remaining data
+		parent::setLegoListVals(array(
+			'listName'=>$legoListVals['listName'],
+			'isPublic'=>$legoListVals['isPublic'],
+			'uid'=>$legoListVals['uid']
+		));
+		parent::legoListErrorChecks();
+
+		return parent::getLegoListVals();
+	}
+
 
 
 	// view methods
@@ -191,5 +203,10 @@ class ListEditorContrClass {
 
 	public function viewLegosInList(): void {
 		$this->listEditorViewClass->echoLegosInList($this->legoListLegos);
+	}
+
+	public function viewLegoDB(): void {
+		$legos = $this->legoClassS->getLegos();
+		$this->listEditorViewClass->echoLegoDB($legos);
 	}
 }

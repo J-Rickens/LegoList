@@ -146,6 +146,9 @@ else {
 	<?php $editor->viewAddLegoToListForm(); ?>
 	<br>
 
+	<?php $editor->viewLegoDB(); ?>
+	<br>
+
 
 	<?php $footerTp = new FooterTp();
 	$footerTp->echoFooter($openerTp->getUrlReturn()); ?>
