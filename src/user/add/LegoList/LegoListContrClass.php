@@ -54,6 +54,16 @@ class LegoListContrClass {
 	// Run Error Checks and create list if possible
 	public function addLegoList(array $legoListVals = array()): void {
 		$this->setLegoListVals($legoListVals);
+
+		// run error checks
+		$this->legoListErrorChecks();
+
+		// Create new List
+		$this->legoListClass->setLegoList($this->legoListVals);
+	}
+
+	// Run Error Checks and create list if possible
+	protected function legoListErrorChecks(): void {
 		//global $openerTp;
 		
 		// Running Error Checks
@@ -85,12 +95,7 @@ class LegoListContrClass {
 			//header('location: ' . $openerTp->getUrlReturn() . 'User/Add/LegoList/index.php?error=uid');
 			//exit();
 		}
-
-		
-		// Create new List
-		$this->legoListClass->setLegoList($this->legoListVals);
 	}
-
 
 	// Reformats isPublic as true/false
 	private function formatPubPri(): void {

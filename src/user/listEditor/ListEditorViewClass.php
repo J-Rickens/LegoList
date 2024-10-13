@@ -27,6 +27,8 @@ class ListEditorViewClass {
 				<?php if ($legoListVals['isPublic']==0) {echo 'checked';}?>>
 				<label for="private">Private</label>
 				<?php //echo 'Error: isPublic not defined'; ?>
+				<input type="hidden" name="uid"
+					value="<?php echo $_SESSION['uid']; ?>">
 				<input type="hidden" name="listId"
 					value="<?php echo $_SESSION['listId']; ?>">
 				<input type="hidden" name="postType"
@@ -41,7 +43,11 @@ class ListEditorViewClass {
 		<?php
 	}
 
-	public function echoAddLegoToListForm($legoId): void {
+	public function echoAddLegoToListForm(): void {
+		$legoId = null;
+		if (isset($_GET['legoid'])) {
+			$legoId = $_GET['legoid'];
+		}
 		?>
 		<section>
 		<div>
@@ -74,10 +80,22 @@ class ListEditorViewClass {
 			<?php if (empty($legoListLegos)): ?>
 				<p>There are No Legos in this List!</p>
 			<?php else: ?>
-				<ul>
+				<table>
+					<tr>
+						<td>Lego ID</td>
+						<td>Name</td>
+						<td>Collection</td>
+						<td>Pieces</td>
+						<td>Cost</td>
+					</tr>
 					<?php foreach ($legoListLegos as $lego): ?>
-						<li><?php var_dump($lego); ?>
-							<form action="<?php echo 'index.php'; ?>" method="post">
+						<tr>
+							<td><?php echo $lego['lego_id']; ?></td>
+							<td><?php echo $lego['lego_name']; ?></td>
+							<td><?php echo $lego['lego_collection']; ?></td>
+							<td><?php echo $lego['piece_count']; ?></td>
+							<td><?php echo $lego['lego_cost']; ?></td>
+							<td><form action="<?php echo 'index.php'; ?>" method="post">
 								<input type="hidden" name="legoId"
 									value="<?php echo $lego['lego_id']; ?>">
 								<input type="hidden" name="listId"
@@ -85,12 +103,44 @@ class ListEditorViewClass {
 								<input type="hidden" name="postType"
 									value="removeLego">
 								<button type="submit" name="submit">REMOVE LEGO</button>
-							</form>
-						</li>
+							</form></td>
+						</tr>
 					<?php endforeach; ?>
-				</ul>
+				</table>
 			<?php endif; ?>
 			
+		</div>
+		</section>
+		<?php
+	}
+
+	public function echoLegoDB(array $legos): void {
+		?>
+		<section>
+		<div>
+			<h4>Legos in Database</h4>
+			<?php if (empty($legos)): ?>
+				<p>There are No Legos in the Database!</p>
+			<?php else: ?>
+				<table>
+					<tr>
+						<td>Lego ID</td>
+						<td>Name</td>
+						<td>Collection</td>
+						<td>Pieces</td>
+						<td>Cost</td>
+					</tr>
+					<?php foreach ($legos as $lego): ?>
+						<tr>
+							<td><?php echo $lego['lego_id']; ?></td>
+							<td><?php echo $lego['lego_name']; ?></td>
+							<td><?php echo $lego['lego_collection']; ?></td>
+							<td><?php echo $lego['piece_count']; ?></td>
+							<td><?php echo $lego['lego_cost']; ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php endif; ?>
 		</div>
 		</section>
 		<?php

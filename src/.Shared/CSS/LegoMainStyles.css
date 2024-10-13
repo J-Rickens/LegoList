@@ -2,6 +2,10 @@ body {
   background-color: lightgray;
 }
 
+table, tr, td {
+  border: 1px solid black;
+}
+
 input {
   background-color: white;
 }

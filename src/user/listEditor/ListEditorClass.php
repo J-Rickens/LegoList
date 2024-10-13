@@ -9,16 +9,9 @@ use Src\Shared\Exceptions\StmtFailedException;
 
 class ListEditorClass {
 
-	private $dbh;
-
-	public function __construct($dbh = null) {
-		if (is_null($dbh))
-		{
+	public function __construct(private ?DbhClass $dbh = null) {
+		if (is_null($dbh)) {
 			$this->dbh = new DbhClass();
-		}
-		else
-		{
-			$this->dbh = $dbh;
 		}
 	}
 
@@ -44,6 +37,21 @@ class ListEditorClass {
 		return [true, null];
 	}
 
+	public function checkLegoInLegoList($listId, $legoId): bool {
+		$this->dbh->prepStmt('SELECT * FROM legolist_lego_c WHERE list_id = ? AND lego_id = ?;');
+
+		if (!$this->dbh->execStmt(array($listId, $legoId))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('checkstmtfailed');
+		}
+
+		if ($this->dbh->getStmt()->rowCount() == 0) {
+			$this->dbh->setStmtNull();
+			return false;
+		}
+		return true;
+	}
+
 	public function getLegoListData($listId): array {
 		$this->dbh->prepStmt('SELECT * FROM legolists WHERE list_id = ?;');
 
@@ -61,7 +69,10 @@ class ListEditorClass {
 	}
 
 	public function getLegoListLegos($listId): array {
-		$this->dbh->prepStmt('SELECT lego_id FROM legolist_lego_c WHERE list_id = ?;');
+		$this->dbh->prepStmt('SELECT legos.lego_id, legos.lego_name, legos.lego_collection, legos.piece_count, legos.lego_cost, ctable.date_added
+			FROM legolist_lego_c AS ctable
+			LEFT JOIN legos ON ctable.lego_id = legos.lego_id
+			WHERE ctable.list_id = ?;');
 
 		if (!$this->dbh->execStmt(array($listId))) {
 			$this->dbh->setStmtNull();
@@ -76,8 +87,17 @@ class ListEditorClass {
 		return $this->dbh->getStmt()->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
+	public function updateLegoListData(array $legoListVals): void {
+		$this->dbh->prepStmt('UPDATE legolists SET list_name = ?, is_public = ?, owner_id = ? WHERE list_id = ?;');
+
+		if (!$this->dbh->execStmt(array($legoListVals['listName'], $legoListVals['isPublic'], $legoListVals['uid'], $legoListVals['listId']))) {
+			$this->dbh->setStmtNull();
+			throw new StmtFailedException('updatestmtfailed');
+		}
+	}
+
 	public function setLegoToList(array $addLegoVals): void {
-		$stmt = $this->dbh->prepStmt('INSERT INTO legolist_lego_c (list_id, lego_id) VALUES (?, ?);');
+		$this->dbh->prepStmt('INSERT INTO legolist_lego_c (list_id, lego_id) VALUES (?, ?);');
 		
 		if (!$this->dbh->execStmt(array($addLegoVals['listId'], $addLegoVals['legoId']))) {
 			$this->dbh->setStmtNull();
@@ -86,11 +106,11 @@ class ListEditorClass {
 	}
 
 	public function deleteLegoFromList(array $removeLegoVals): void {
-		$stmt = $this->dbh->prepStmt('DELETE FROM legolist_lego_c WHERE list_id = ? AND lego_id = ?;');
+		$this->dbh->prepStmt('DELETE FROM legolist_lego_c WHERE list_id = ? AND lego_id = ?;');
 		
 		if (!$this->dbh->execStmt(array($removeLegoVals['listId'], $removeLegoVals['legoId']))) {
 			$this->dbh->setStmtNull();
-			throw new StmtFailedException('setstmtfailed');
+			throw new StmtFailedException('deletestmtfailed');
 		}
 	}
 }
